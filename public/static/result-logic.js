@@ -116,19 +116,19 @@ function drawRadarChart() {
   
   for (let i = 0; i < labels.length; i++) {
     const angle = (Math.PI * 2 / labels.length) * i - Math.PI / 2;
-    const labelRadius = maxRadius + 35;  // 40 → 35に調整
+    const labelRadius = maxRadius + 35;
     const x = centerX + labelRadius * Math.cos(angle);
     const y = centerY + labelRadius * Math.sin(angle);
     
     // 背景の白い円を描画
     ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
     ctx.beginPath();
-    ctx.arc(x, y, 22, 0, Math.PI * 2);  // 25 → 22に縮小
+    ctx.arc(x, y, 20, 0, Math.PI * 2);  // 22 → 20に縮小
     ctx.fill();
     
     // ラベルテキストを描画
     ctx.fillStyle = '#2C5F8D';
-    ctx.font = 'bold 14px "M PLUS Rounded 1c", sans-serif';  // 16px → 14pxに縮小
+    ctx.font = 'bold 13px "M PLUS Rounded 1c", sans-serif';  // 14px → 13pxに縮小
     ctx.fillText(labels[i], x, y);
   }
 
