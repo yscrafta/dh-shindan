@@ -1,202 +1,177 @@
 # 歯科衛生士キャラ診断メーカー
 
-## プロジェクト概要
-- **名前**: あなたはどの歯科衛生士？キャラ診断メーカー
-- **目的**: 歯科衛生士学生・現役歯科衛生士向けの性格診断サイト
-- **特徴**: 
-  - 12問の質問に答えてMBTIベースの16タイプのキャラクターに診断
-  - 学生版・社会人版で質問を分岐
-  - 可愛いパステルブルーのデザイン
-  - レーダーチャート表示
-  - 公式LINE誘導機能
+## 🦷 プロジェクト概要
 
-## 現在実装済みの機能
+12問の質問に答えて、あなたにぴったりの働き方がわかる歯科衛生士向けのMBTI診断サイトです。
 
-### 1. TOPページ（index.html）
-- 診断スタートボタン
-- 結果を見るボタン（診断後に表示）
-- TOP画像表示
+### 主な機能
+- 3つの属性選択（学生🐥・現役🦷・復帰考え中🤔）
+- 12問の質問による性格診断
+- 16タイプのキャラクター結果
+- レーダーチャートによる特性の可視化
+- SNSシェア機能（TikTok/Instagram）
+- 結果画像のダウンロード機能
+- 公式LINE誘導
 
-### 2. 属性選択ページ（select-type.html）
-- 歯科衛生士学生（🦷）
-- 現役歯科衛生士（🪥）
+## 🌐 公開URL
 
-### 3. 診断質問ページ（question.html）
-- 進捗バー表示（Q1/12形式）
-- 共通質問3問
-- 学生版・社会人版それぞれ9問（計12問）
-- MBTIスコア計算機能
+- **本番サイト**: https://dental-hygienist-diagnosis.pages.dev/
+- **GitHubリポジトリ**: https://github.com/yscrafta/dh-shindan
 
-### 4. 診断結果ページ（result.html）
-- キャラクター画像表示
-- タイプ名、キャッチコピー、性格説明
-- レーダーチャート（Canvas描画）
-  - 共感力
-  - 技術力
-  - コミュニケーション力
-  - 積極性
-  - 柔軟性
-- 向いている働き方
-- 向いている医院タイプ
-- 相性の良いキャラ
-- SNSシェアボタン（Twitter・LINE）
-- 公式LINE誘導ボタン（https://lin.ee/PJoKVxPo）
-- もう一度診断するボタン
+## 📊 データアーキテクチャ
 
-### 5. 16タイプのキャラクター
-1. ポジティブうさぎ型（ENFP）
-2. リーダーライオン型（ENTJ）
-3. 職人ねこ型（ISTP）
-4. 癒しパンダ型（ISFP）
-5. 教育者フクロウ型（INFJ）
-6. ムードメーカーイヌ型（ESFP）
-7. サポートひつじ型（ESFJ）
-8. 戦略家キツネ型（INTJ）
-9. 探究者リス型（INTP）
-10. アイデアマンペンギン型（ENTP）
-11. 慎重派コアラ型（ISFJ）
-12. 完璧主義シカ型（ISTJ）
-13. 情熱家トラ型（ENFJ）
-14. 思慮深いクマ型（INFP）
-15. 実務家カンガルー型（ESTJ）
-16. 好奇心ハムスター型（ESTP）
+### キャラクターデータ
+16種類のMBTIタイプに基づくキャラクター：
+- ENFP, ENFJ, ENTJ, ENTP
+- ESFP, ESFJ, ESTJ, ESTP
+- INFP, INFJ, INTJ, INTP
+- ISFP, ISFJ, ISTJ, ISTP
 
-## データ構造
+### 質問データ構造
+- 共通質問: 3問（全ユーザー共通）
+- 属性別質問: 9問（学生/現役/復帰考え中）
+- 合計: 12問
 
-### LocalStorageに保存されるデータ
-- `user_type`: 'student' または 'professional'
-- `current_question`: 現在の質問番号（1-12）
-- `diagnosis_answers`: 回答データとMBTIスコア
-- `diagnosis_result`: 診断結果のMBTIタイプ（例: ENFP）
-
-### MBTIスコア計算方式
+### スコアリングシステム
+各回答にMBTI要素のスコアを設定：
 - E/I（外向/内向）
-- S/N（感覚/直観）
+- S/N（感覚/直感）
 - T/F（思考/感情）
 - J/P（判断/知覚）
 
-各質問の選択肢にスコアを設定し、合計値で判定。
+### レーダーチャート要素
+5つの特性を5段階で評価：
+- 共感力
+- 技術力
+- コミュ力
+- 積極性
+- 柔軟性
 
-## 技術スタック
+## 🎯 ユーザーフロー
 
-### フロントエンド
-- HTML5/CSS3/JavaScript（Vanilla JS）
-- Canvas API（レーダーチャート描画）
-- Google Fonts（M PLUS Rounded 1c）
-- LocalStorage（データ保存）
+1. **TOPページ**: 「診断スタート」or「結果を見る」
+2. **属性選択**: 学生/現役/復帰考え中を選択
+3. **質問ページ**: 12問の質問に回答（進捗バー表示）
+4. **結果ページ**: 
+   - キャラクター画像・名前・説明
+   - レーダーチャート
+   - 向いている働き方・医院タイプ
+   - 相性の良いキャラクター
+   - 画像ダウンロードボタン
+   - SNSシェアボタン（TikTok/Instagram）
+   - 公式LINE誘導
 
-### バックエンド
-- Hono（Cloudflare Workers/Pages用軽量フレームワーク）
-- TypeScript
-- Vite（ビルドツール）
+## 💻 技術スタック
 
-### デプロイ
-- Cloudflare Pages
-- Wrangler（Cloudflare CLI）
+- **フレームワーク**: Hono（Cloudflare Workers）
+- **デプロイ**: Cloudflare Pages
+- **フロントエンド**: Vanilla JavaScript + TailwindCSS（CDN）
+- **バージョン管理**: Git + GitHub
+- **ビルドツール**: Vite
 
-## ローカル開発
+## 🎨 デザイン
 
-### サンドボックス環境
-```bash
-# ビルド
-npm run build
+- **カラーテーマ**: 青→ピンクのグラデーション（#A7D1E9 → #B8D2E5 → #FCD5DE）
+- **フォント**: M PLUS Rounded 1c（Googleフォント）
+- **レスポンシブ**: モバイルファースト設計
 
-# PM2でサービス起動
-pm2 start ecosystem.config.cjs
+## 📱 シェア機能
 
-# サービステスト
-curl http://localhost:3000
+### TikTok / Instagram
+- 結果画像をダウンロード（1080×1920px）
+- ストーリーに最適化されたサイズ
+- キャラクター情報と公式LINE URLを含む
 
-# ログ確認
-pm2 logs webapp --nostream
-```
+### 画像ダウンロード内容
+- キャラクター画像
+- キャラクター名・MBTIタイプ
+- キャッチフレーズ
+- 説明文
+- 公式LINE URL
 
-### ローカルマシン
-```bash
-# 開発サーバー起動
-npm run dev
+## 🚀 デプロイ状況
 
-# ビルド
-npm run build
+- **ステータス**: ✅ 本番稼働中
+- **プラットフォーム**: Cloudflare Pages
+- **プロジェクト名**: dental-hygienist-diagnosis
+- **本番ブランチ**: main
+- **最終デプロイ**: 2026年1月9日
 
-# プレビュー
-npm run preview
-```
+## 📂 プロジェクト構造
 
-## プロジェクト構造
 ```
 webapp/
-├── src/
-│   └── index.tsx          # Honoアプリケーション
-├── public/
-│   ├── index.html         # TOPページ
-│   ├── select-type.html   # 属性選択ページ
-│   ├── question.html      # 質問ページ
-│   ├── result.html        # 結果ページ
+├── public/                      # 静的ファイル
+│   ├── index.html              # TOPページ
+│   ├── select-type.html        # 属性選択
+│   ├── question.html           # 質問ページ
+│   ├── result.html             # 結果ページ
 │   └── static/
-│       ├── styles.css     # 共通CSS
-│       ├── question-data.js       # 質問データ
-│       ├── question-logic.js      # 質問ページロジック
-│       ├── character-data.js      # キャラクターデータ
-│       ├── result-logic.js        # 結果ページロジック
-│       └── images/        # 画像ファイル（TOP画像 + 16キャラ）
-├── dist/                  # ビルド出力
-│   ├── _worker.js         # Cloudflare Worker
-│   ├── _routes.json       # ルーティング設定
-│   └── ...                # 静的ファイル
-├── ecosystem.config.cjs   # PM2設定
-├── wrangler.jsonc         # Cloudflare設定
-├── vite.config.ts         # Vite設定
-└── package.json
+│       ├── images/             # キャラクター画像（17枚）
+│       ├── styles.css          # スタイルシート
+│       ├── character-data.js   # キャラクターデータ
+│       ├── question-data.js    # 質問データ
+│       ├── question-logic.js   # 質問ロジック
+│       └── result-logic.js     # 結果表示ロジック
+├── src/
+│   └── index.tsx               # Honoアプリケーション
+├── dist/                        # ビルド出力（自動生成）
+├── wrangler.jsonc              # Cloudflare設定
+├── vite.config.ts              # Viteビルド設定
+├── ecosystem.config.cjs        # PM2設定（開発用）
+└── package.json                # 依存関係
+
 ```
 
-## デプロイ手順
+## 🔧 開発コマンド
 
-### Cloudflare Pages
 ```bash
-# ビルド
+# 開発サーバー起動（サンドボックス環境）
+npm run build
+pm2 start ecosystem.config.cjs
+
+# 本番ビルド
 npm run build
 
-# デプロイ
-npm run deploy:prod
+# Cloudflare Pagesにデプロイ
+npm run deploy
+
+# ポートクリーンアップ
+npm run clean-port
+
+# サービステスト
+npm run test
 ```
 
-### デプロイ先URL
-- **開発環境**: https://3000-iyl1s73oadku0s0j2x031-5634da27.sandbox.novita.ai
-- **本番環境**: （デプロイ後に更新）
+## 📝 今後の改善案
 
-## デザインガイドライン
+### 完成済み機能
+✅ 3つの属性選択（学生・現役・復帰考え中）  
+✅ 属性別の質問カスタマイズ  
+✅ 16タイプのキャラクター診断  
+✅ レーダーチャート表示  
+✅ SNSシェア機能（TikTok/Instagram）  
+✅ 画像ダウンロード機能  
+✅ 公式LINE誘導  
+✅ ローカルストレージによる結果保存  
 
-### カラースキーム
-- メインカラー: パステルブルー系（#E6F3FF, #B3D9FF, #80BFFF）
-- アクセントカラー: ピンク系（#FF6B9D, #FFA07A）
-- LINE誘導: グリーン系（#00C300）
+### 追加検討中の機能
+- [ ] 診断結果の詳細分析
+- [ ] キャラクター相性診断の拡張
+- [ ] 複数回診断の履歴機能
+- [ ] OGP画像の動的生成
+- [ ] アクセス解析の実装
 
-### フォント
-- メインフォント: M PLUS Rounded 1c（丸ゴシック）
+## 👤 開発者情報
 
-### デザイン要素
-- 丸みのあるボタン（border-radius: 50px）
-- ふんわりしたホバーエフェクト
-- グラデーション背景
-- 影付きカード
-- 可愛くて優しい雰囲気
+- **GitHubアカウント**: yscrafta
+- **メールアドレス**: yscraft.a@gmail.com
+- **リポジトリ**: https://github.com/yscrafta/dh-shindan
 
-## 今後の開発予定
+## 📄 ライセンス
 
-### 未実装機能
-- 結果のスクリーンショット保存機能
-- より詳細な診断結果（公式LINE限定）
-- 診断結果の統計データ収集
+このプロジェクトは個人用途で開発されています。
 
-### 推奨される改善点
-1. OGP画像の設定（SNSシェア時の表示最適化）
-2. Google Analytics導入（アクセス解析）
-3. セキュリティヘッダーの追加
-4. パフォーマンス最適化（画像圧縮など）
+---
 
-## ライセンス
-MIT License
-
-## 最終更新日
-2026-01-09
+**最終更新日**: 2026年1月9日
