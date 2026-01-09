@@ -110,16 +110,25 @@ function drawRadarChart() {
     ctx.stroke();
   }
 
-  // ラベルを描画
-  ctx.fillStyle = '#333';
-  ctx.font = 'bold 14px "M PLUS Rounded 1c", sans-serif';
+  // ラベルを描画（背景付きで見やすく）
   ctx.textAlign = 'center';
   ctx.textBaseline = 'middle';
+  
   for (let i = 0; i < labels.length; i++) {
     const angle = (Math.PI * 2 / labels.length) * i - Math.PI / 2;
-    const labelRadius = maxRadius + 30;
+    const labelRadius = maxRadius + 40;
     const x = centerX + labelRadius * Math.cos(angle);
     const y = centerY + labelRadius * Math.sin(angle);
+    
+    // 背景の白い円を描画
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
+    ctx.beginPath();
+    ctx.arc(x, y, 25, 0, Math.PI * 2);
+    ctx.fill();
+    
+    // ラベルテキストを描画
+    ctx.fillStyle = '#2C5F8D';
+    ctx.font = 'bold 16px "M PLUS Rounded 1c", sans-serif';
     ctx.fillText(labels[i], x, y);
   }
 
