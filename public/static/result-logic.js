@@ -165,18 +165,18 @@ function drawRadarChart() {
   }
 }
 
-// シェア機能（現在のページURLをコピー）
+// シェア機能（TOPページのURLをコピー）
 function shareResult() {
-  const resultUrl = window.location.href;
+  const topUrl = 'https://dental-hygienist-diagnosis.pages.dev/';
   
   if (navigator.clipboard && navigator.clipboard.writeText) {
-    navigator.clipboard.writeText(resultUrl).then(() => {
-      alert('診断結果のURLをコピーしました！📋\n\nSNSに貼り付けてシェアしてください');
+    navigator.clipboard.writeText(topUrl).then(() => {
+      alert('診断サイトのURLをコピーしました！📋\n\nSNSで友達を招待しよう！');
     }).catch(() => {
-      fallbackCopy(resultUrl);
+      fallbackCopy(topUrl);
     });
   } else {
-    fallbackCopy(resultUrl);
+    fallbackCopy(topUrl);
   }
 }
 
@@ -292,6 +292,103 @@ async function downloadResultImage(event) {
     ctx.textAlign = 'center';
     const maxWidth = 800;
     wrapText(ctx, character.catchphrase, 540, 1370, maxWidth, 45);
+
+    // レーダーチャートを描画
+    const radarY = 1480;
+    const radarSize = 350;
+    const radarCenterX = 540;
+    const radarCenterY = radarY + radarSize / 2;
+    const radarMaxRadius = radarSize * 0.3;
+    const levels = 5;
+    const labels = ['共感力', '技術力', 'コミュ力', '積極性', '柔軟性'];
+    const radarData = character.radar;
+
+    // 背景の同心円
+    ctx.strokeStyle = '#E0E0E0';
+    ctx.lineWidth = 1;
+    for (let i = 1; i <= levels; i++) {
+      ctx.beginPath();
+      const radius = (radarMaxRadius / levels) * i;
+      for (let j = 0; j <= labels.length; j++) {
+        const angle = (Math.PI * 2 / labels.length) * j - Math.PI / 2;
+        const x = radarCenterX + radius * Math.cos(angle);
+        const y = radarCenterY + radius * Math.sin(angle);
+        if (j === 0) {
+          ctx.moveTo(x, y);
+        } else {
+          ctx.lineTo(x, y);
+        }
+      }
+      ctx.closePath();
+      ctx.stroke();
+    }
+
+    // 軸
+    ctx.strokeStyle = '#B0B0B0';
+    ctx.lineWidth = 1;
+    for (let i = 0; i < labels.length; i++) {
+      const angle = (Math.PI * 2 / labels.length) * i - Math.PI / 2;
+      ctx.beginPath();
+      ctx.moveTo(radarCenterX, radarCenterY);
+      ctx.lineTo(
+        radarCenterX + radarMaxRadius * Math.cos(angle),
+        radarCenterY + radarMaxRadius * Math.sin(angle)
+      );
+      ctx.stroke();
+    }
+
+    // ラベル
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    for (let i = 0; i < labels.length; i++) {
+      const angle = (Math.PI * 2 / labels.length) * i - Math.PI / 2;
+      const labelRadius = radarMaxRadius + 35;
+      const x = radarCenterX + labelRadius * Math.cos(angle);
+      const y = radarCenterY + labelRadius * Math.sin(angle);
+      
+      // 背景の白い円
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
+      ctx.beginPath();
+      ctx.arc(x, y, 22, 0, Math.PI * 2);
+      ctx.fill();
+      
+      // ラベルテキスト
+      ctx.fillStyle = '#2C5F8D';
+      ctx.font = 'bold 16px "M PLUS Rounded 1c", sans-serif';
+      ctx.fillText(labels[i], x, y);
+    }
+
+    // データ（塗りつぶし）
+    ctx.fillStyle = 'rgba(255, 107, 157, 0.3)';
+    ctx.strokeStyle = '#FF6B9D';
+    ctx.lineWidth = 3;
+    ctx.beginPath();
+    for (let i = 0; i < radarData.length; i++) {
+      const angle = (Math.PI * 2 / radarData.length) * i - Math.PI / 2;
+      const value = radarData[i] / levels;
+      const x = radarCenterX + radarMaxRadius * value * Math.cos(angle);
+      const y = radarCenterY + radarMaxRadius * value * Math.sin(angle);
+      if (i === 0) {
+        ctx.moveTo(x, y);
+      } else {
+        ctx.lineTo(x, y);
+      }
+    }
+    ctx.closePath();
+    ctx.fill();
+    ctx.stroke();
+
+    // データポイント
+    ctx.fillStyle = '#FF6B9D';
+    for (let i = 0; i < radarData.length; i++) {
+      const angle = (Math.PI * 2 / radarData.length) * i - Math.PI / 2;
+      const value = radarData[i] / levels;
+      const x = radarCenterX + radarMaxRadius * value * Math.cos(angle);
+      const y = radarCenterY + radarMaxRadius * value * Math.sin(angle);
+      ctx.beginPath();
+      ctx.arc(x, y, 6, 0, Math.PI * 2);
+      ctx.fill();
+    }
 
     // ボタンを元に戻す
     btn.textContent = originalText;
