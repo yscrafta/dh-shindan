@@ -235,11 +235,11 @@ async function downloadResultImage(event) {
     ctx.fillStyle = gradient;
     ctx.fillRect(0, 0, 1080, 1920);
 
-    // タイトル
-    ctx.fillStyle = '#333';
-    ctx.font = 'bold 48px sans-serif';
+    // タイトル（可愛いフォント風）
+    ctx.fillStyle = '#2C5F8D';
+    ctx.font = 'bold 52px "Comic Sans MS", "Arial Rounded MT Bold", sans-serif';
     ctx.textAlign = 'center';
-    ctx.fillText('あなたはどの歯科衛生士？', 540, 100);
+    ctx.fillText('🦷 あなたはどの歯科衛生士？ 🦷', 540, 100);
 
     // 画像をfetchで取得してからcanvasに描画
     const response = await fetch(character.image);
@@ -254,46 +254,60 @@ async function downloadResultImage(event) {
       img.src = imageUrl;
     });
 
-    // キャラクター画像（中央）
+    // キャラクター画像（中央・丸くトリミング風の背景）
     const imgWidth = 600;
     const imgHeight = 600;
     const imgX = (1080 - imgWidth) / 2;
     const imgY = 200;
+    
+    // 白い円の背景
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+    ctx.beginPath();
+    ctx.arc(540, 500, 320, 0, Math.PI * 2);
+    ctx.fill();
+    
     ctx.drawImage(img, imgX, imgY, imgWidth, imgHeight);
     
     URL.revokeObjectURL(imageUrl);
 
-    // キャラクター名
+    // 可愛い吹き出し風の背景
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
+    ctx.beginPath();
+    ctx.roundRect(100, 850, 880, 280, 30);
+    ctx.fill();
+    
+    // 影をつける
+    ctx.strokeStyle = '#FF6B9D';
+    ctx.lineWidth = 4;
+    ctx.stroke();
+
+    // キャラクター名（可愛いフォント）
     ctx.fillStyle = '#FF6B9D';
-    ctx.font = 'bold 64px sans-serif';
+    ctx.font = 'bold 72px "Comic Sans MS", "Arial Rounded MT Bold", sans-serif';
     ctx.textAlign = 'center';
-    ctx.fillText(character.name, 540, 900);
+    ctx.fillText(character.name, 540, 940);
 
-    // MBTIタイプ
+    // MBTIタイプ（小さめ）
     ctx.fillStyle = '#666';
-    ctx.font = 'bold 36px sans-serif';
-    ctx.fillText(character.mbti, 540, 960);
+    ctx.font = 'bold 32px "Comic Sans MS", sans-serif';
+    ctx.fillText(`[ ${character.mbti} タイプ ]`, 540, 1000);
 
-    // キャッチフレーズ
-    ctx.fillStyle = '#333';
-    ctx.font = '32px sans-serif';
+    // キャッチフレーズ（POPな感じ）
+    ctx.fillStyle = '#2C5F8D';
+    ctx.font = '28px "Comic Sans MS", sans-serif';
     ctx.textAlign = 'center';
-    const maxWidth = 900;
-    wrapText(ctx, character.catchphrase, 540, 1040, maxWidth, 50);
+    const maxWidth = 800;
+    wrapText(ctx, character.catchphrase, 540, 1070, maxWidth, 45);
 
-    // 説明文
-    ctx.font = '24px sans-serif';
-    wrapText(ctx, character.description, 540, 1200, maxWidth, 40);
-
-    // 公式LINE誘導
-    ctx.fillStyle = '#00B900';
-    ctx.font = 'bold 28px sans-serif';
-    ctx.fillText('📱 公式LINEでより詳しい診断をゲット！', 540, 1700);
-
-    // URL
-    ctx.fillStyle = '#666';
-    ctx.font = '20px sans-serif';
-    ctx.fillText('https://dental-hygienist-diagnosis.pages.dev/', 540, 1800);
+    // POPな説明文を追加
+    ctx.fillStyle = '#FF6B9D';
+    ctx.font = 'bold 36px "Comic Sans MS", sans-serif';
+    ctx.fillText('✨ 詳しい診断結果はこちら ✨', 540, 1600);
+    
+    // URL（大きめで目立つように）
+    ctx.fillStyle = '#2C5F8D';
+    ctx.font = 'bold 32px sans-serif';
+    ctx.fillText('dental-hygienist-diagnosis.pages.dev', 540, 1700);
 
     // ボタンを元に戻す
     btn.textContent = originalText;
