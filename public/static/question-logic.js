@@ -17,7 +17,14 @@ function getQuestion(index) {
   if (index <= 3) {
     return commonQuestions[index - 1];
   } else {
-    const specificQuestions = userType === 'student' ? studentQuestions : professionalQuestions;
+    let specificQuestions;
+    if (userType === 'student') {
+      specificQuestions = studentQuestions;
+    } else if (userType === 'returning') {
+      specificQuestions = returningQuestions;
+    } else {
+      specificQuestions = professionalQuestions;
+    }
     return specificQuestions[index - 4];
   }
 }

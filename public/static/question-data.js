@@ -13,11 +13,11 @@ const commonQuestions = [
   },
   {
     id: 2,
-    text: '情報を理解するとき、あなたは？',
+    text: '新しいことを学ぶとき、あなたは？',
     choices: [
-      { text: 'A) 具体例や経験から学ぶのが好き', scores: { S: 2 } },
-      { text: 'B) 理論や全体像から理解したい', scores: { N: 2 } },
-      { text: 'C) どちらもバランス良く', scores: { S: 1, N: 1 } }
+      { text: 'A) 実際にやってみて覚える', scores: { S: 2 } },
+      { text: 'B) まず全体の流れを理解する', scores: { N: 2 } },
+      { text: 'C) どちらも大切にする', scores: { S: 1, N: 1 } }
     ]
   },
   {
@@ -56,7 +56,7 @@ const studentQuestions = [
     text: '患者さんへの説明実習で大切なのは？',
     choices: [
       { text: 'A) 分かりやすい言葉で丁寧に', scores: { F: 2, S: 1 } },
-      { text: 'B) 正確な情報を論理的に', scores: { T: 2, S: 1 } },
+      { text: 'B) 正確な情報と根拠をもとに', scores: { T: 2, S: 1 } },
       { text: 'C) 患者さんの反応を見ながら', scores: { F: 1, N: 1 } }
     ]
   },
@@ -84,7 +84,7 @@ const studentQuestions = [
     choices: [
       { text: 'A) 早めに準備を始める', scores: { J: 2 } },
       { text: 'B) 過去問を分析して効率的に', scores: { T: 2, N: 1 } },
-      { text: 'C) 仲間と励まし合いながら', scores: { F: 2, E: 1 } }
+      { text: 'C) ギリギリになってから追い込む', scores: { P: 2 } }
     ]
   },
   {
@@ -92,7 +92,7 @@ const studentQuestions = [
     text: '就職先を選ぶとき重視するのは？',
     choices: [
       { text: 'A) 職場の雰囲気・人間関係', scores: { F: 2 } },
-      { text: 'B) 技術が学べる環境', scores: { T: 1, N: 2 } },
+      { text: 'B) 学べる環境', scores: { T: 1, N: 2 } },
       { text: 'C) 安定性・福利厚生', scores: { S: 2, J: 1 } }
     ]
   },
@@ -102,7 +102,7 @@ const studentQuestions = [
     choices: [
       { text: 'A) まだ分からない・色々試したい', scores: { P: 2, N: 1 } },
       { text: 'B) 専門性を高めたい', scores: { T: 2, J: 1 } },
-      { text: 'C) 患者さんに寄り添える衛生士', scores: { F: 2 } }
+      { text: 'C) 長く続けられる衛生士', scores: { S: 1, J: 1 } }
     ]
   },
   {
@@ -165,7 +165,7 @@ const professionalQuestions = [
   },
   {
     id: 9,
-    text: '新しい分野（訪問・小児など）への興味は？',
+    text: '新しい分野への興味は？',
     choices: [
       { text: 'A) 挑戦してみたい', scores: { N: 2, P: 1 } },
       { text: 'B) 今の専門性を深めたい', scores: { S: 2, J: 2 } },
@@ -197,6 +197,91 @@ const professionalQuestions = [
       { text: 'A) すぐに相談・協力を求める', scores: { E: 2, F: 1 } },
       { text: 'B) 自分で解決策を考える', scores: { I: 2, T: 2 } },
       { text: 'C) 信頼できる人に相談', scores: { I: 1, F: 1 } }
+    ]
+  }
+];
+
+// 復帰考え中版質問（Q4-Q12）
+const returningQuestions = [
+  {
+    id: 4,
+    text: 'ブランク期間中、気になっていたことは？',
+    choices: [
+      { text: 'A) 技術や知識が古くなっていないか', scores: { T: 2, J: 1 } },
+      { text: 'B) 職場の人間関係に馴染めるか', scores: { F: 2, I: 1 } },
+      { text: 'C) 体力や生活リズムがついていけるか', scores: { S: 2, P: 1 } }
+    ]
+  },
+  {
+    id: 5,
+    text: '復帰後の新しい環境について？',
+    choices: [
+      { text: 'A) 早く慣れて積極的に関わりたい', scores: { E: 2, P: 1 } },
+      { text: 'B) ゆっくり様子を見ながら慣れたい', scores: { I: 2, S: 1 } },
+      { text: 'C) 計画的に段階を踏んで慣れたい', scores: { J: 2, S: 1 } }
+    ]
+  },
+  {
+    id: 6,
+    text: '最新の機器や技術を学ぶとき？',
+    choices: [
+      { text: 'A) 興味を持って積極的に学びたい', scores: { N: 2, E: 1 } },
+      { text: 'B) 必要なものから少しずつ学ぶ', scores: { S: 2, J: 1 } },
+      { text: 'C) 先輩に教わりながら慎重に', scores: { I: 2, F: 1 } }
+    ]
+  },
+  {
+    id: 7,
+    text: '患者さんへの対応で大切にしたいのは？',
+    choices: [
+      { text: 'A) 丁寧で親身な対応', scores: { F: 2, I: 1 } },
+      { text: 'B) 正確で適切な処置', scores: { T: 2, S: 1 } },
+      { text: 'C) 柔軟で臨機応変な対応', scores: { N: 1, P: 2 } }
+    ]
+  },
+  {
+    id: 8,
+    text: '復帰後の勤務形態は？',
+    choices: [
+      { text: 'A) フルタイムでしっかり働きたい', scores: { E: 2, J: 2 } },
+      { text: 'B) パートで無理なく続けたい', scores: { I: 1, P: 1 } },
+      { text: 'C) 状況に合わせて調整したい', scores: { P: 2, F: 1 } }
+    ]
+  },
+  {
+    id: 9,
+    text: '職場選びで最も重視するのは？',
+    choices: [
+      { text: 'A) 働きやすさ・融通の利きやすさ', scores: { F: 2, P: 1 } },
+      { text: 'B) 研修制度・教育体制の充実', scores: { T: 2, N: 1 } },
+      { text: 'C) 通勤の便・勤務時間', scores: { S: 2, J: 1 } }
+    ]
+  },
+  {
+    id: 10,
+    text: '家庭と仕事の両立について？',
+    choices: [
+      { text: 'A) 仕事も家庭も全力で頑張りたい', scores: { E: 2, J: 1 } },
+      { text: 'B) バランスを取りながら無理なく', scores: { I: 1, P: 2 } },
+      { text: 'C) 家庭を優先しながら働きたい', scores: { F: 2, S: 1 } }
+    ]
+  },
+  {
+    id: 11,
+    text: '復帰後のキャリアビジョンは？',
+    choices: [
+      { text: 'A) まず現場に慣れることが優先', scores: { S: 2, J: 1 } },
+      { text: 'B) 以前のスキルを取り戻したい', scores: { T: 2, I: 1 } },
+      { text: 'C) 新しいことにも挑戦したい', scores: { N: 2, P: 1 } }
+    ]
+  },
+  {
+    id: 12,
+    text: '復帰にあたって不安なことがあったら？',
+    choices: [
+      { text: 'A) すぐに相談して解決したい', scores: { E: 2, F: 1 } },
+      { text: 'B) 自分で調べて対処する', scores: { I: 2, T: 1 } },
+      { text: 'C) 同じ立場の人と共有したい', scores: { E: 1, F: 2 } }
     ]
   }
 ];
