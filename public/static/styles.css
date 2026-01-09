@@ -353,7 +353,7 @@ button, .btn {
 }
 
 .info-section h3 {
-  font-size: 1.3rem;
+  font-size: 1.1rem;
   font-weight: 700;
   color: #2C5F8D;
   margin-bottom: 15px;
@@ -369,9 +369,10 @@ button, .btn {
   margin: 8px 0;
   background: white;
   border-radius: 10px;
-  font-size: 1rem;
+  font-size: 0.9rem;
   color: #444;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  line-height: 1.4;
 }
 
 .info-section li::before {
