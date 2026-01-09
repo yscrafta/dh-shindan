@@ -315,9 +315,10 @@ button, .btn {
 /* レーダーチャート */
 .radar-container {
   margin: 40px 0;
-  padding: 30px;
+  padding: 40px 20px;
   background: #F9F9F9;
   border-radius: 15px;
+  overflow: visible;
 }
 
 .radar-title {
