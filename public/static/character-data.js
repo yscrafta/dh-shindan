@@ -1,0 +1,196 @@
+// 16タイプのキャラクターデータ
+
+const characterData = {
+  'ENFP': {
+    name: '🐰 ポジティブうさぎ型',
+    mbti: 'ENFP型',
+    image: '/static/images/ENFP.jpg',
+    color: '#FFB6C1',
+    catchphrase: '明るく元気なムードメーカー！',
+    description: '社交的で好奇心旺盛。患者さんとのコミュニケーションが得意で、チームを明るくする存在。新しいことにチャレンジするのが好きで、職場に笑顔と活気をもたらします。患者さんの不安を和らげる温かい雰囲気が魅力です。',
+    radar: [4, 3, 5, 5, 5], // 共感力, 技術力, コミュ力, 積極性, 柔軟性
+    workStyle: ['チーム医療', '患者教育', '予防歯科'],
+    clinicType: ['アットホームな雰囲気', '予防重視', 'スタッフ仲良し'],
+    compatibility: ['ムードメーカーイヌ型', '情熱家トラ型']
+  },
+  'ENTJ': {
+    name: '🦁 リーダーライオン型',
+    mbti: 'ENTJ型',
+    image: '/static/images/ENTJ.jpg',
+    color: '#DDA0DD',
+    catchphrase: '頼れるリーダー！チームを引っ張る',
+    description: 'リーダーシップがあり、効率的に物事を進める力があります。目標達成に向けて周りを巻き込む力があり、主任や教育担当として活躍できる存在。明確なビジョンを持って行動します。',
+    radar: [3, 4, 4, 5, 3],
+    workStyle: ['主任・リーダー職', '教育担当', '新人指導'],
+    clinicType: ['成長志向', '教育制度充実', 'キャリアアップ可能'],
+    compatibility: ['戦略家キツネ型', '実務家カンガルー型']
+  },
+  'ISTP': {
+    name: '🐱 職人ねこ型',
+    mbti: 'ISTP型',
+    image: '/static/images/ISTP.jpg',
+    color: '#C0C0C0',
+    catchphrase: '技術にこだわる職人気質',
+    description: '技術を磨くことに集中できるタイプ。黙々と作業するのが得意で、正確性を重視します。専門性を高めることに喜びを感じ、技術面で信頼される存在です。',
+    radar: [2, 5, 2, 3, 3],
+    workStyle: ['技術特化', '専門性追求', '丁寧な施術'],
+    clinicType: ['技術重視', '落ち着いた環境', '少人数制'],
+    compatibility: ['探究者リス型', '完璧主義シカ型']
+  },
+  'ISFP': {
+    name: '🐼 癒しパンダ型',
+    mbti: 'ISFP型',
+    image: '/static/images/ISFP.jpg',
+    color: '#98FB98',
+    catchphrase: '優しく穏やかな癒し系',
+    description: '患者さんに優しく寄り添うことができるタイプ。穏やかで落ち着いた雰囲気を持ち、患者さんに安心感を与えます。ゆったりとした診療環境で力を発揮します。',
+    radar: [5, 3, 3, 2, 4],
+    workStyle: ['患者ケア重視', 'ゆったり診療', '訪問歯科'],
+    clinicType: ['患者第一', 'ゆとりある診療時間', 'アットホーム'],
+    compatibility: ['思慮深いクマ型', 'サポートひつじ型']
+  },
+  'INFJ': {
+    name: '🦉 教育者フクロウ型',
+    mbti: 'INFJ型',
+    image: '/static/images/INFJ.jpg',
+    color: '#4682B4',
+    catchphrase: '洞察力のある教育者',
+    description: '患者教育や後輩指導が得意なタイプ。深い洞察力で相手を理解し、適切なアドバイスができます。予防指導や教育の場面で力を発揮します。',
+    radar: [5, 4, 4, 3, 4],
+    workStyle: ['患者教育', '予防指導', '後輩育成'],
+    clinicType: ['教育重視', '予防歯科', '研修制度充実'],
+    compatibility: ['情熱家トラ型', 'リーダーライオン型']
+  },
+  'ESFP': {
+    name: '🐶 ムードメーカーイヌ型',
+    mbti: 'ESFP型',
+    image: '/static/images/ESFP.jpg',
+    color: '#FFB347',
+    catchphrase: '場を盛り上げる人気者',
+    description: '明るく社交的で、患者さんやスタッフを笑顔にする天才。その場の雰囲気を読んで、楽しい空気を作り出せます。小児歯科などで特に活躍できます。',
+    radar: [4, 3, 5, 5, 5],
+    workStyle: ['患者対応', 'チーム活性化', '小児歯科'],
+    clinicType: ['明るい雰囲気', '小児対応', 'イベント多い'],
+    compatibility: ['ポジティブうさぎ型', '好奇心ハムスター型']
+  },
+  'ESFJ': {
+    name: '🐑 サポートひつじ型',
+    mbti: 'ESFJ型',
+    image: '/static/images/ESFJ.jpg',
+    color: '#FFFACD',
+    catchphrase: 'みんなを支える縁の下の力持ち',
+    description: '協調性が高く、チームをサポートする力があります。気配り上手で信頼され、チームワークを大切にします。患者さんやスタッフから愛される存在です。',
+    radar: [5, 3, 4, 3, 4],
+    workStyle: ['チームサポート', '患者ケア', '院内調整'],
+    clinicType: ['チームワーク重視', '温かい雰囲気', '地域密着'],
+    compatibility: ['慎重派コアラ型', '癒しパンダ型']
+  },
+  'INTJ': {
+    name: '🦊 戦略家キツネ型',
+    mbti: 'INTJ型',
+    image: '/static/images/INTJ.jpg',
+    color: '#9370DB',
+    catchphrase: '戦略的に考える頭脳派',
+    description: '論理的で計画的に物事を進めます。長期的な視点で考え、専門性を深めることを好みます。データや分析を重視し、システマティックな環境で力を発揮します。',
+    radar: [2, 5, 3, 4, 3],
+    workStyle: ['専門性追求', '研究・分析', 'マネジメント'],
+    clinicType: ['先進的', 'データ重視', 'システム化'],
+    compatibility: ['リーダーライオン型', '探究者リス型']
+  },
+  'INTP': {
+    name: '🐿️ 探究者リス型',
+    mbti: 'INTP型',
+    image: '/static/images/INTP.jpg',
+    color: '#D2B48C',
+    catchphrase: '知識を探求する研究者気質',
+    description: '知的好奇心が強く、新しい知識を学ぶのが好きです。専門分野を深く研究することに喜びを感じ、最新技術の習得に積極的です。',
+    radar: [2, 4, 2, 3, 4],
+    workStyle: ['専門分野研究', '最新技術習得', '分析業務'],
+    clinicType: ['先進医療', '研修充実', '学会発表'],
+    compatibility: ['職人ねこ型', '戦略家キツネ型']
+  },
+  'ENTP': {
+    name: '🐧 アイデアマンペンギン型',
+    mbti: 'ENTP型',
+    image: '/static/images/ENTP.jpg',
+    color: '#87CEEB',
+    catchphrase: '発想豊かなアイデアマン',
+    description: '創造的で柔軟な発想ができるタイプ。新しい方法を提案するのが得意で、改善やイノベーションを起こします。変化を楽しみ、挑戦を歓迎します。',
+    radar: [3, 4, 4, 5, 5],
+    workStyle: ['企画立案', '改善提案', '新規プロジェクト'],
+    clinicType: ['革新的', '変化を歓迎', 'チャレンジ精神'],
+    compatibility: ['ポジティブうさぎ型', '好奇心ハムスター型']
+  },
+  'ISFJ': {
+    name: '🐨 慎重派コアラ型',
+    mbti: 'ISFJ型',
+    image: '/static/images/ISFJ.jpg',
+    color: '#FFDAB9',
+    catchphrase: '丁寧で確実な仕事ぶり',
+    description: '慎重で丁寧なタイプ。ミスなく確実に仕事をこなします。ルーティン業務を着実にこなし、品質管理に優れています。',
+    radar: [4, 4, 3, 2, 3],
+    workStyle: ['正確な作業', 'ルーティン業務', '品質管理'],
+    clinicType: ['丁寧な診療', 'マニュアル整備', '安定志向'],
+    compatibility: ['サポートひつじ型', '完璧主義シカ型']
+  },
+  'ISTJ': {
+    name: '🦌 完璧主義シカ型',
+    mbti: 'ISTJ型',
+    image: '/static/images/ISTJ.jpg',
+    color: '#A0522D',
+    catchphrase: '責任感が強く真面目な努力家',
+    description: 'ルールを守り、責任感を持って仕事に取り組むタイプ。正確な施術と管理業務に優れ、信頼性の高い仕事をします。',
+    radar: [2, 5, 3, 3, 2],
+    workStyle: ['正確な施術', '管理業務', '品質追求'],
+    clinicType: ['ルール明確', 'システム化', '伝統的'],
+    compatibility: ['慎重派コアラ型', '実務家カンガルー型']
+  },
+  'ENFJ': {
+    name: '🐯 情熱家トラ型',
+    mbti: 'ENFJ型',
+    image: '/static/images/ENFJ.jpg',
+    color: '#FF7F50',
+    catchphrase: '情熱的に人を導くリーダー',
+    description: '情熱的で人を励ます力があります。教育や指導に向いており、後輩を育てることに喜びを感じます。温かいリーダーシップでチームを引っ張ります。',
+    radar: [5, 4, 5, 5, 4],
+    workStyle: ['後輩育成', '患者教育', 'チームリーダー'],
+    clinicType: ['教育熱心', '成長志向', '温かい雰囲気'],
+    compatibility: ['教育者フクロウ型', 'リーダーライオン型']
+  },
+  'INFP': {
+    name: '🐻 思慮深いクマ型',
+    mbti: 'INFP型',
+    image: '/static/images/INFP.jpg',
+    color: '#E6E6FA',
+    catchphrase: '優しく思いやりのある理想主義者',
+    description: '患者さんの気持ちに深く寄り添えるタイプ。理想を大切にし、患者第一の姿勢で仕事に取り組みます。温かく思いやりのある対応が魅力です。',
+    radar: [5, 3, 3, 2, 4],
+    workStyle: ['患者ケア', 'ゆったり診療', '訪問歯科'],
+    clinicType: ['患者第一', '温かい', '理念重視'],
+    compatibility: ['癒しパンダ型', '教育者フクロウ型']
+  },
+  'ESTJ': {
+    name: '🦘 実務家カンガルー型',
+    mbti: 'ESTJ型',
+    image: '/static/images/ESTJ.jpg',
+    color: '#BDB76B',
+    catchphrase: '効率的でテキパキこなす実務家',
+    description: '効率を重視し、テキパキと仕事をこなします。管理能力が高く、オペレーションの改善やシステム化に優れています。',
+    radar: [3, 4, 4, 4, 3],
+    workStyle: ['効率化', '管理業務', 'オペレーション改善'],
+    clinicType: ['システム化', '効率重視', '大規模医院'],
+    compatibility: ['リーダーライオン型', '完璧主義シカ型']
+  },
+  'ESTP': {
+    name: '🐹 好奇心ハムスター型',
+    mbti: 'ESTP型',
+    image: '/static/images/ESTP.jpg',
+    color: '#FFD700',
+    catchphrase: '行動力抜群のチャレンジャー',
+    description: '行動力があり、新しいことに挑戦するのが好きです。変化が多い環境でも柔軟に対応でき、活気ある職場で力を発揮します。',
+    radar: [3, 3, 4, 5, 5],
+    workStyle: ['新規プロジェクト', '訪問歯科', '多様な業務'],
+    clinicType: ['変化が多い', '挑戦歓迎', '活気ある'],
+    compatibility: ['ムードメーカーイヌ型', 'アイデアマンペンギン型']
+  }
+};

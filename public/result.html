@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>診断結果 - 歯科衛生士キャラ診断</title>
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+    <div class="container fade-in">
+        <div class="result-container">
+            <h1>あなたの診断結果</h1>
+            
+            <img class="character-image" id="characterImage" src="" alt="キャラクター">
+            
+            <div class="type-name" id="typeName"></div>
+            <div class="mbti-type" id="mbtiType"></div>
+            <div class="catchphrase" id="catchphrase"></div>
+            
+            <div class="description" id="description"></div>
+
+            <!-- レーダーチャート -->
+            <div class="radar-container">
+                <h3 class="radar-title">🌟 あなたの特性チャート</h3>
+                <canvas id="radarChart" width="400" height="400"></canvas>
+            </div>
+
+            <!-- 向いている働き方 -->
+            <div class="info-section">
+                <h3>💼 向いている働き方</h3>
+                <ul id="workStyleList"></ul>
+            </div>
+
+            <!-- 向いている医院タイプ -->
+            <div class="info-section">
+                <h3>🏥 向いている医院タイプ</h3>
+                <ul id="clinicTypeList"></ul>
+            </div>
+
+            <!-- 相性の良いキャラ -->
+            <div class="info-section">
+                <h3>🤝 相性の良いキャラ</h3>
+                <ul id="compatibilityList"></ul>
+            </div>
+
+            <!-- LINE誘導ボタン -->
+            <a href="https://lin.ee/PJoKVxPo" target="_blank" class="line-cta-btn">
+                📱 公式LINEでより詳しい診断をゲット！
+            </a>
+
+            <!-- シェアボタン -->
+            <div class="share-container">
+                <a href="#" class="share-btn twitter" id="twitterShare" target="_blank">
+                    🐦 Twitterでシェア
+                </a>
+                <a href="#" class="share-btn line" id="lineShare" target="_blank">
+                    💬 LINEでシェア
+                </a>
+            </div>
+
+            <!-- アクションボタン -->
+            <div class="btn-container">
+                <button class="primary-btn" onclick="retryDiagnosis()">もう一度診断する</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="/static/character-data.js"></script>
+    <script src="/static/result-logic.js"></script>
+</body>
+</html>

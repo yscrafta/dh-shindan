@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>あなたはどの歯科衛生士？キャラ診断メーカー</title>
+    <meta name="description" content="12問に答えてあなたにぴったりの働き方が分かる！歯科衛生士キャラ診断">
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+    <div class="top-page fade-in">
+        <div class="top-image-container">
+            <img src="/static/images/top.jpg" alt="あなたはどの歯科衛生士？キャラ診断メーカー">
+        </div>
+
+        <div class="btn-container">
+            <button class="primary-btn" onclick="startDiagnosis()">診断スタート</button>
+            <button class="secondary-btn" id="viewResultBtn" style="display: none;" onclick="viewResult()">結果を見る</button>
+        </div>
+    </div>
+
+    <script>
+        // ページ読み込み時にLocalStorageをチェック
+        window.addEventListener('DOMContentLoaded', function() {
+            const savedResult = localStorage.getItem('diagnosis_result');
+            if (savedResult) {
+                document.getElementById('viewResultBtn').style.display = 'block';
+            }
+        });
+
+        function startDiagnosis() {
+            // 診断開始時に前回の結果をクリア
+            localStorage.removeItem('diagnosis_result');
+            localStorage.removeItem('diagnosis_answers');
+            localStorage.removeItem('current_question');
+            window.location.href = '/select-type.html';
+        }
+
+        function viewResult() {
+            const savedResult = localStorage.getItem('diagnosis_result');
+            if (savedResult) {
+                window.location.href = `/result.html?type=${savedResult}`;
+            }
+        }
+    </script>
+</body>
+</html>
