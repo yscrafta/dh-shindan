@@ -395,12 +395,12 @@ button, .btn {
 }
 
 .share-btn.tiktok {
-  background: linear-gradient(135deg, #000000 0%, #EE1D52 50%, #69C9D0 100%);
+  background: linear-gradient(135deg, #A7D1E9 0%, #87CEEB 100%);
   cursor: pointer;
 }
 
 .share-btn.instagram {
-  background: linear-gradient(135deg, #833AB4 0%, #FD1D1D 50%, #FCB045 100%);
+  background: linear-gradient(135deg, #A7D1E9 0%, #87CEEB 100%);
   cursor: pointer;
 }
 
