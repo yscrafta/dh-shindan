@@ -156,45 +156,23 @@ function drawRadarChart() {
   }
 }
 
-// シェア機能
+// シェア機能（シンプルにURLコピーのみ）
 function shareResult() {
   const siteUrl = 'https://dental-hygienist-diagnosis.pages.dev/';
-  const shareText = `私は「${character.name}」でした！\n${character.catchphrase}\n\nあなたはどの歯科衛生士？`;
   
-  // Web Share APIをサポートしているか確認
-  if (navigator.share) {
-    navigator.share({
-      title: 'あなたはどの歯科衛生士？',
-      text: shareText,
-      url: siteUrl
-    }).then(() => {
-      console.log('シェア成功');
-    }).catch((error) => {
-      console.log('シェアキャンセル', error);
-      fallbackShare(siteUrl, shareText);
-    });
-  } else {
-    fallbackShare(siteUrl, shareText);
-  }
-}
-
-// フォールバック（コピー機能）
-function fallbackShare(url, text) {
-  const shareContent = `${text}\n\n${url}`;
-  
-  if (navigator.clipboard) {
-    navigator.clipboard.writeText(shareContent).then(() => {
-      alert('診断結果のリンクをコピーしました！\n\nSNSに貼り付けてシェアしてください 📤');
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(siteUrl).then(() => {
+      alert('診断サイトのURLをコピーしました！📋\n\nSNSに貼り付けてシェアしてください');
     }).catch(() => {
-      promptCopy(shareContent);
+      fallbackCopy(siteUrl);
     });
   } else {
-    promptCopy(shareContent);
+    fallbackCopy(siteUrl);
   }
 }
 
-// テキストエリアでコピー
-function promptCopy(text) {
+// フォールバック（テキストエリアでコピー）
+function fallbackCopy(text) {
   const textarea = document.createElement('textarea');
   textarea.value = text;
   textarea.style.position = 'fixed';
@@ -204,9 +182,9 @@ function promptCopy(text) {
   
   try {
     document.execCommand('copy');
-    alert('診断結果のリンクをコピーしました！\n\nSNSに貼り付けてシェアしてください 📤');
+    alert('診断サイトのURLをコピーしました！📋\n\nSNSに貼り付けてシェアしてください');
   } catch (err) {
-    alert('リンク: https://dental-hygienist-diagnosis.pages.dev/\n\n手動でコピーしてシェアしてください');
+    alert('URL: https://dental-hygienist-diagnosis.pages.dev/\n\n手動でコピーしてシェアしてください');
   }
   
   document.body.removeChild(textarea);
@@ -223,8 +201,10 @@ function retryDiagnosis() {
 
 // 結果画像をダウンロード
 function downloadResultImage() {
-  // モバイルでは別の方法を使用
-  const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+  // ローディング表示
+  const originalText = event.target.textContent;
+  event.target.textContent = '生成中...';
+  event.target.disabled = true;
   
   const canvas = document.createElement('canvas');
   canvas.width = 1080;
@@ -248,75 +228,94 @@ function downloadResultImage() {
   // キャラクター画像を読み込んで描画
   const img = new Image();
   img.crossOrigin = 'anonymous';
+  
   img.onload = function() {
-    // キャラクター画像（中央）
-    const imgWidth = 600;
-    const imgHeight = 600;
-    const imgX = (1080 - imgWidth) / 2;
-    const imgY = 200;
-    ctx.drawImage(img, imgX, imgY, imgWidth, imgHeight);
+    try {
+      // キャラクター画像（中央）
+      const imgWidth = 600;
+      const imgHeight = 600;
+      const imgX = (1080 - imgWidth) / 2;
+      const imgY = 200;
+      ctx.drawImage(img, imgX, imgY, imgWidth, imgHeight);
 
-    // キャラクター名
-    ctx.fillStyle = '#FF6B9D';
-    ctx.font = 'bold 64px sans-serif';
-    ctx.textAlign = 'center';
-    ctx.fillText(character.name, 540, 900);
+      // キャラクター名
+      ctx.fillStyle = '#FF6B9D';
+      ctx.font = 'bold 64px sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText(character.name, 540, 900);
 
-    // MBTIタイプ
-    ctx.fillStyle = '#666';
-    ctx.font = 'bold 36px sans-serif';
-    ctx.fillText(character.mbti, 540, 960);
+      // MBTIタイプ
+      ctx.fillStyle = '#666';
+      ctx.font = 'bold 36px sans-serif';
+      ctx.fillText(character.mbti, 540, 960);
 
-    // キャッチフレーズ
-    ctx.fillStyle = '#333';
-    ctx.font = '32px sans-serif';
-    ctx.textAlign = 'center';
-    const maxWidth = 900;
-    wrapText(ctx, character.catchphrase, 540, 1040, maxWidth, 50);
+      // キャッチフレーズ
+      ctx.fillStyle = '#333';
+      ctx.font = '32px sans-serif';
+      ctx.textAlign = 'center';
+      const maxWidth = 900;
+      wrapText(ctx, character.catchphrase, 540, 1040, maxWidth, 50);
 
-    // 説明文
-    ctx.font = '24px sans-serif';
-    wrapText(ctx, character.description, 540, 1200, maxWidth, 40);
+      // 説明文
+      ctx.font = '24px sans-serif';
+      wrapText(ctx, character.description, 540, 1200, maxWidth, 40);
 
-    // 公式LINE誘導
-    ctx.fillStyle = '#00B900';
-    ctx.font = 'bold 28px sans-serif';
-    ctx.fillText('📱 公式LINEでより詳しい診断をゲット！', 540, 1700);
+      // 公式LINE誘導
+      ctx.fillStyle = '#00B900';
+      ctx.font = 'bold 28px sans-serif';
+      ctx.fillText('📱 公式LINEでより詳しい診断をゲット！', 540, 1700);
 
-    // URL
-    ctx.fillStyle = '#666';
-    ctx.font = '20px sans-serif';
-    ctx.fillText('https://dental-hygienist-diagnosis.pages.dev/', 540, 1800);
+      // URL
+      ctx.fillStyle = '#666';
+      ctx.font = '20px sans-serif';
+      ctx.fillText('https://dental-hygienist-diagnosis.pages.dev/', 540, 1800);
 
-    // 画像をダウンロード
-    if (isMobile) {
-      // モバイル: 新しいタブで画像を開く
-      const dataUrl = canvas.toDataURL('image/png');
-      const newWindow = window.open();
-      if (newWindow) {
-        newWindow.document.write('<img src="' + dataUrl + '" style="max-width:100%;" /><p style="text-align:center;">長押しして画像を保存してください</p>');
-      } else {
-        // ポップアップがブロックされた場合
-        const link = document.createElement('a');
-        link.download = `歯科衛生士診断_${character.name}.png`;
-        link.href = dataUrl;
-        link.click();
-      }
-    } else {
-      // PC: 通常のダウンロード
+      // 画像をダウンロード
       canvas.toBlob(function(blob) {
+        if (!blob) {
+          alert('画像の生成に失敗しました。もう一度お試しください。');
+          event.target.textContent = originalText;
+          event.target.disabled = false;
+          return;
+        }
+        
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
         a.download = `歯科衛生士診断_${character.name}.png`;
+        document.body.appendChild(a);
         a.click();
+        document.body.removeChild(a);
         URL.revokeObjectURL(url);
-      }, 'image/png');
+        
+        // ボタンを元に戻す
+        event.target.textContent = originalText;
+        event.target.disabled = false;
+        
+        // モバイルの場合は追加のメッセージ
+        const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+        if (isMobile) {
+          setTimeout(() => {
+            alert('画像を保存しました！📸\n\n写真アプリまたはダウンロードフォルダをご確認ください。');
+          }, 500);
+        }
+      }, 'image/png', 1.0);
+      
+    } catch (error) {
+      console.error('画像生成エラー:', error);
+      alert('画像の生成に失敗しました。もう一度お試しください。');
+      event.target.textContent = originalText;
+      event.target.disabled = false;
     }
   };
+  
   img.onerror = function() {
     alert('画像の読み込みに失敗しました。もう一度お試しください。');
+    event.target.textContent = originalText;
+    event.target.disabled = false;
   };
+  
+  // 画像を読み込む
   img.src = character.image;
 }
 
