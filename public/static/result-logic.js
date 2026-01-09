@@ -16,7 +16,6 @@ if (!character) {
 window.addEventListener('DOMContentLoaded', function() {
   displayResult();
   drawRadarChart();
-  setupShareButtons();
 });
 
 // 結果を表示
@@ -60,9 +59,16 @@ function displayResult() {
 function drawRadarChart() {
   const canvas = document.getElementById('radarChart');
   const ctx = canvas.getContext('2d');
+  
+  // キャンバスのサイズを設定（レスポンシブ対応）
+  const container = canvas.parentElement;
+  const size = Math.min(container.clientWidth - 60, 400);
+  canvas.width = size;
+  canvas.height = size;
+  
   const centerX = canvas.width / 2;
   const centerY = canvas.height / 2;
-  const maxRadius = 150;
+  const maxRadius = size * 0.35;
   const levels = 5;
   const labels = ['共感力', '技術力', 'コミュ力', '積極性', '柔軟性'];
   const data = character.radar;
@@ -150,24 +156,60 @@ function drawRadarChart() {
   }
 }
 
-// シェアボタンを設定
-function setupShareButtons() {
-  const currentUrl = window.location.href;
+// シェア機能
+function shareResult() {
+  const siteUrl = 'https://dental-hygienist-diagnosis.pages.dev/';
   const shareText = `私は「${character.name}」でした！\n${character.catchphrase}\n\nあなたはどの歯科衛生士？`;
   
-  // TikTok（モバイルアプリ起動 or ウェブ）
-  const tiktokBtn = document.getElementById('tiktokShare');
-  tiktokBtn.onclick = function(e) {
-    e.preventDefault();
-    alert('TikTokアプリでこの画像を共有してください！\n\n「📸 結果画像をダウンロード」ボタンで画像を保存できます。');
-  };
+  // Web Share APIをサポートしているか確認
+  if (navigator.share) {
+    navigator.share({
+      title: 'あなたはどの歯科衛生士？',
+      text: shareText,
+      url: siteUrl
+    }).then(() => {
+      console.log('シェア成功');
+    }).catch((error) => {
+      console.log('シェアキャンセル', error);
+      fallbackShare(siteUrl, shareText);
+    });
+  } else {
+    fallbackShare(siteUrl, shareText);
+  }
+}
 
-  // Instagram（モバイルアプリ起動 or ウェブ）
-  const instagramBtn = document.getElementById('instagramShare');
-  instagramBtn.onclick = function(e) {
-    e.preventDefault();
-    alert('Instagramストーリーでこの画像を共有してください！\n\n「📸 結果画像をダウンロード」ボタンで画像を保存できます。');
-  };
+// フォールバック（コピー機能）
+function fallbackShare(url, text) {
+  const shareContent = `${text}\n\n${url}`;
+  
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(shareContent).then(() => {
+      alert('診断結果のリンクをコピーしました！\n\nSNSに貼り付けてシェアしてください 📤');
+    }).catch(() => {
+      promptCopy(shareContent);
+    });
+  } else {
+    promptCopy(shareContent);
+  }
+}
+
+// テキストエリアでコピー
+function promptCopy(text) {
+  const textarea = document.createElement('textarea');
+  textarea.value = text;
+  textarea.style.position = 'fixed';
+  textarea.style.opacity = '0';
+  document.body.appendChild(textarea);
+  textarea.select();
+  
+  try {
+    document.execCommand('copy');
+    alert('診断結果のリンクをコピーしました！\n\nSNSに貼り付けてシェアしてください 📤');
+  } catch (err) {
+    alert('リンク: https://dental-hygienist-diagnosis.pages.dev/\n\n手動でコピーしてシェアしてください');
+  }
+  
+  document.body.removeChild(textarea);
 }
 
 // もう一度診断する
@@ -181,6 +223,9 @@ function retryDiagnosis() {
 
 // 結果画像をダウンロード
 function downloadResultImage() {
+  // モバイルでは別の方法を使用
+  const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+  
   const canvas = document.createElement('canvas');
   canvas.width = 1080;
   canvas.height = 1920;
@@ -196,7 +241,7 @@ function downloadResultImage() {
 
   // タイトル
   ctx.fillStyle = '#333';
-  ctx.font = 'bold 48px "M PLUS Rounded 1c", sans-serif';
+  ctx.font = 'bold 48px sans-serif';
   ctx.textAlign = 'center';
   ctx.fillText('あなたはどの歯科衛生士？', 540, 100);
 
@@ -213,45 +258,64 @@ function downloadResultImage() {
 
     // キャラクター名
     ctx.fillStyle = '#FF6B9D';
-    ctx.font = 'bold 64px "M PLUS Rounded 1c", sans-serif';
+    ctx.font = 'bold 64px sans-serif';
     ctx.textAlign = 'center';
     ctx.fillText(character.name, 540, 900);
 
     // MBTIタイプ
     ctx.fillStyle = '#666';
-    ctx.font = 'bold 36px "M PLUS Rounded 1c", sans-serif';
+    ctx.font = 'bold 36px sans-serif';
     ctx.fillText(character.mbti, 540, 960);
 
     // キャッチフレーズ
     ctx.fillStyle = '#333';
-    ctx.font = '32px "M PLUS Rounded 1c", sans-serif';
+    ctx.font = '32px sans-serif';
     ctx.textAlign = 'center';
     const maxWidth = 900;
     wrapText(ctx, character.catchphrase, 540, 1040, maxWidth, 50);
 
     // 説明文
-    ctx.font = '24px "M PLUS Rounded 1c", sans-serif';
+    ctx.font = '24px sans-serif';
     wrapText(ctx, character.description, 540, 1200, maxWidth, 40);
 
     // 公式LINE誘導
     ctx.fillStyle = '#00B900';
-    ctx.font = 'bold 28px "M PLUS Rounded 1c", sans-serif';
+    ctx.font = 'bold 28px sans-serif';
     ctx.fillText('📱 公式LINEでより詳しい診断をゲット！', 540, 1700);
 
-    // QRコード風の案内
+    // URL
     ctx.fillStyle = '#666';
-    ctx.font = '20px "M PLUS Rounded 1c", sans-serif';
-    ctx.fillText('診断サイト: https://lin.ee/PJoKVxPo', 540, 1800);
+    ctx.font = '20px sans-serif';
+    ctx.fillText('https://dental-hygienist-diagnosis.pages.dev/', 540, 1800);
 
     // 画像をダウンロード
-    canvas.toBlob(function(blob) {
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `歯科衛生士診断_${character.name}.png`;
-      a.click();
-      URL.revokeObjectURL(url);
-    }, 'image/png');
+    if (isMobile) {
+      // モバイル: 新しいタブで画像を開く
+      const dataUrl = canvas.toDataURL('image/png');
+      const newWindow = window.open();
+      if (newWindow) {
+        newWindow.document.write('<img src="' + dataUrl + '" style="max-width:100%;" /><p style="text-align:center;">長押しして画像を保存してください</p>');
+      } else {
+        // ポップアップがブロックされた場合
+        const link = document.createElement('a');
+        link.download = `歯科衛生士診断_${character.name}.png`;
+        link.href = dataUrl;
+        link.click();
+      }
+    } else {
+      // PC: 通常のダウンロード
+      canvas.toBlob(function(blob) {
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `歯科衛生士診断_${character.name}.png`;
+        a.click();
+        URL.revokeObjectURL(url);
+      }, 'image/png');
+    }
+  };
+  img.onerror = function() {
+    alert('画像の読み込みに失敗しました。もう一度お試しください。');
   };
   img.src = character.image;
 }

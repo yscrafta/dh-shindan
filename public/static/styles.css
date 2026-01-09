@@ -250,11 +250,11 @@ button, .btn {
   transition: all 0.3s ease;
 }
 
-.choice-btn:hover {
+.choice-btn:active {
   background: linear-gradient(135deg, #B3D9FF 0%, #80BFFF 100%);
   color: white;
   border-color: #3D7EAA;
-  transform: translateX(10px);
+  transform: scale(0.98);
 }
 
 /* 結果ページ */
@@ -329,9 +329,18 @@ button, .btn {
 }
 
 #radarChart {
-  max-width: 400px;
+  max-width: 100%;
+  width: 400px;
+  height: 400px;
   margin: 0 auto;
   display: block;
+}
+
+@media (max-width: 768px) {
+  #radarChart {
+    width: 100%;
+    height: auto;
+  }
 }
 
 /* リスト */
@@ -379,34 +388,6 @@ button, .btn {
   justify-content: center;
   margin: 30px 0;
   flex-wrap: wrap;
-}
-
-.share-btn {
-  padding: 15px 30px;
-  border-radius: 50px;
-  font-size: 1rem;
-  font-weight: 700;
-  color: white;
-  text-decoration: none;
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  transition: all 0.3s ease;
-}
-
-.share-btn.tiktok {
-  background: linear-gradient(135deg, #A7D1E9 0%, #87CEEB 100%);
-  cursor: pointer;
-}
-
-.share-btn.instagram {
-  background: linear-gradient(135deg, #A7D1E9 0%, #87CEEB 100%);
-  cursor: pointer;
-}
-
-.share-btn:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
 }
 
 /* LINE誘導ボタン（特に目立つデザイン） */
