@@ -50,7 +50,7 @@
 
             <!-- 画像ダウンロードボタン -->
             <div class="btn-container">
-                <button class="primary-btn" onclick="downloadResultImage()">📸 結果画像をダウンロード</button>
+                <button class="primary-btn" onclick="downloadResultImage(event)">📸 結果画像をダウンロード</button>
             </div>
 
             <!-- シェアボタン -->
@@ -62,7 +62,8 @@
 
             <!-- アクションボタン -->
             <div class="btn-container">
-                <button class="primary-btn" onclick="retryDiagnosis()">もう一度診断する</button>
+                <button class="primary-btn" onclick="startDiagnosis()">診断をやってみる</button>
+                <button class="secondary-btn" onclick="retryDiagnosis()">もう一度診断する</button>
             </div>
         </div>
     </div>

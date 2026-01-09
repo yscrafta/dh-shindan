@@ -165,18 +165,18 @@ function drawRadarChart() {
   }
 }
 
-// シェア機能（シンプルにURLコピーのみ）
+// シェア機能（現在のページURLをコピー）
 function shareResult() {
-  const siteUrl = 'https://dental-hygienist-diagnosis.pages.dev/';
+  const resultUrl = window.location.href;
   
   if (navigator.clipboard && navigator.clipboard.writeText) {
-    navigator.clipboard.writeText(siteUrl).then(() => {
-      alert('診断サイトのURLをコピーしました！📋\n\nSNSに貼り付けてシェアしてください');
+    navigator.clipboard.writeText(resultUrl).then(() => {
+      alert('診断結果のURLをコピーしました！📋\n\nSNSに貼り付けてシェアしてください');
     }).catch(() => {
-      fallbackCopy(siteUrl);
+      fallbackCopy(resultUrl);
     });
   } else {
-    fallbackCopy(siteUrl);
+    fallbackCopy(resultUrl);
   }
 }
 
@@ -208,124 +208,124 @@ function retryDiagnosis() {
   window.location.href = '/';
 }
 
+// 診断をやってみる（新規ユーザー向け）
+function startDiagnosis() {
+  window.location.href = '/';
+}
+
 // 結果画像をダウンロード
-function downloadResultImage() {
+async function downloadResultImage(event) {
   // ローディング表示
-  const originalText = event.target.textContent;
-  event.target.textContent = '生成中...';
-  event.target.disabled = true;
+  const btn = event.target;
+  const originalText = btn.textContent;
+  btn.textContent = '生成中...';
+  btn.disabled = true;
   
-  const canvas = document.createElement('canvas');
-  canvas.width = 1080;
-  canvas.height = 1920;
-  const ctx = canvas.getContext('2d');
+  try {
+    const canvas = document.createElement('canvas');
+    canvas.width = 1080;
+    canvas.height = 1920;
+    const ctx = canvas.getContext('2d');
 
-  // 背景のグラデーション
-  const gradient = ctx.createLinearGradient(0, 0, 0, 1920);
-  gradient.addColorStop(0, '#A7D1E9');
-  gradient.addColorStop(0.5, '#B8D2E5');
-  gradient.addColorStop(1, '#FCD5DE');
-  ctx.fillStyle = gradient;
-  ctx.fillRect(0, 0, 1080, 1920);
+    // 背景のグラデーション
+    const gradient = ctx.createLinearGradient(0, 0, 0, 1920);
+    gradient.addColorStop(0, '#A7D1E9');
+    gradient.addColorStop(0.5, '#B8D2E5');
+    gradient.addColorStop(1, '#FCD5DE');
+    ctx.fillStyle = gradient;
+    ctx.fillRect(0, 0, 1080, 1920);
 
-  // タイトル
-  ctx.fillStyle = '#333';
-  ctx.font = 'bold 48px sans-serif';
-  ctx.textAlign = 'center';
-  ctx.fillText('あなたはどの歯科衛生士？', 540, 100);
+    // タイトル
+    ctx.fillStyle = '#333';
+    ctx.font = 'bold 48px sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('あなたはどの歯科衛生士？', 540, 100);
 
-  // キャラクター画像を読み込んで描画
-  const img = new Image();
-  img.crossOrigin = 'anonymous';
-  
-  img.onload = function() {
-    try {
-      // キャラクター画像（中央）
-      const imgWidth = 600;
-      const imgHeight = 600;
-      const imgX = (1080 - imgWidth) / 2;
-      const imgY = 200;
-      ctx.drawImage(img, imgX, imgY, imgWidth, imgHeight);
+    // 画像をfetchで取得してからcanvasに描画
+    const response = await fetch(character.image);
+    const blob = await response.blob();
+    const imageUrl = URL.createObjectURL(blob);
+    
+    const img = new Image();
+    
+    await new Promise((resolve, reject) => {
+      img.onload = () => resolve();
+      img.onerror = () => reject(new Error('画像の読み込みに失敗しました'));
+      img.src = imageUrl;
+    });
 
-      // キャラクター名
-      ctx.fillStyle = '#FF6B9D';
-      ctx.font = 'bold 64px sans-serif';
-      ctx.textAlign = 'center';
-      ctx.fillText(character.name, 540, 900);
+    // キャラクター画像（中央）
+    const imgWidth = 600;
+    const imgHeight = 600;
+    const imgX = (1080 - imgWidth) / 2;
+    const imgY = 200;
+    ctx.drawImage(img, imgX, imgY, imgWidth, imgHeight);
+    
+    URL.revokeObjectURL(imageUrl);
 
-      // MBTIタイプ
-      ctx.fillStyle = '#666';
-      ctx.font = 'bold 36px sans-serif';
-      ctx.fillText(character.mbti, 540, 960);
+    // キャラクター名
+    ctx.fillStyle = '#FF6B9D';
+    ctx.font = 'bold 64px sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText(character.name, 540, 900);
 
-      // キャッチフレーズ
-      ctx.fillStyle = '#333';
-      ctx.font = '32px sans-serif';
-      ctx.textAlign = 'center';
-      const maxWidth = 900;
-      wrapText(ctx, character.catchphrase, 540, 1040, maxWidth, 50);
+    // MBTIタイプ
+    ctx.fillStyle = '#666';
+    ctx.font = 'bold 36px sans-serif';
+    ctx.fillText(character.mbti, 540, 960);
 
-      // 説明文
-      ctx.font = '24px sans-serif';
-      wrapText(ctx, character.description, 540, 1200, maxWidth, 40);
+    // キャッチフレーズ
+    ctx.fillStyle = '#333';
+    ctx.font = '32px sans-serif';
+    ctx.textAlign = 'center';
+    const maxWidth = 900;
+    wrapText(ctx, character.catchphrase, 540, 1040, maxWidth, 50);
 
-      // 公式LINE誘導
-      ctx.fillStyle = '#00B900';
-      ctx.font = 'bold 28px sans-serif';
-      ctx.fillText('📱 公式LINEでより詳しい診断をゲット！', 540, 1700);
+    // 説明文
+    ctx.font = '24px sans-serif';
+    wrapText(ctx, character.description, 540, 1200, maxWidth, 40);
 
-      // URL
-      ctx.fillStyle = '#666';
-      ctx.font = '20px sans-serif';
-      ctx.fillText('https://dental-hygienist-diagnosis.pages.dev/', 540, 1800);
+    // 公式LINE誘導
+    ctx.fillStyle = '#00B900';
+    ctx.font = 'bold 28px sans-serif';
+    ctx.fillText('📱 公式LINEでより詳しい診断をゲット！', 540, 1700);
 
-      // 画像をダウンロード
-      canvas.toBlob(function(blob) {
-        if (!blob) {
-          alert('画像の生成に失敗しました。もう一度お試しください。');
-          event.target.textContent = originalText;
-          event.target.disabled = false;
-          return;
-        }
-        
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `歯科衛生士診断_${character.name}.png`;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url);
-        
-        // ボタンを元に戻す
-        event.target.textContent = originalText;
-        event.target.disabled = false;
-        
-        // モバイルの場合は追加のメッセージ
-        const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-        if (isMobile) {
-          setTimeout(() => {
-            alert('画像を保存しました！📸\n\n写真アプリまたはダウンロードフォルダをご確認ください。');
-          }, 500);
-        }
-      }, 'image/png', 1.0);
+    // URL
+    ctx.fillStyle = '#666';
+    ctx.font = '20px sans-serif';
+    ctx.fillText('https://dental-hygienist-diagnosis.pages.dev/', 540, 1800);
+
+    // 画像をダウンロード
+    canvas.toBlob(function(blob) {
+      if (!blob) {
+        throw new Error('画像の生成に失敗しました');
+      }
       
-    } catch (error) {
-      console.error('画像生成エラー:', error);
-      alert('画像の生成に失敗しました。もう一度お試しください。');
-      event.target.textContent = originalText;
-      event.target.disabled = false;
-    }
-  };
-  
-  img.onerror = function() {
-    alert('画像の読み込みに失敗しました。もう一度お試しください。');
-    event.target.textContent = originalText;
-    event.target.disabled = false;
-  };
-  
-  // 画像を読み込む
-  img.src = character.image;
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `歯科衛生士診断_${character.name}.png`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      
+      // ボタンを元に戻す
+      btn.textContent = originalText;
+      btn.disabled = false;
+      
+      // 成功メッセージ
+      setTimeout(() => {
+        alert('画像を保存しました！📸\n\n写真アプリまたはダウンロードフォルダをご確認ください。');
+      }, 300);
+    }, 'image/png', 1.0);
+    
+  } catch (error) {
+    console.error('画像生成エラー:', error);
+    alert('画像の生成に失敗しました。もう一度お試しください。');
+    btn.textContent = originalText;
+    btn.disabled = false;
+  }
 }
 
 // テキストを折り返して描画
