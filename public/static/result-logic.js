@@ -235,9 +235,9 @@ async function downloadResultImage(event) {
     ctx.fillStyle = gradient;
     ctx.fillRect(0, 0, 1080, 1920);
 
-    // タイトル（可愛いフォント風）
+    // タイトル（丸ゴシック）
     ctx.fillStyle = '#2C5F8D';
-    ctx.font = 'bold 52px "Comic Sans MS", "Arial Rounded MT Bold", sans-serif';
+    ctx.font = 'bold 52px "Rounded Mplus 1c", "M PLUS Rounded 1c", "Hiragino Maru Gothic ProN", sans-serif';
     ctx.textAlign = 'center';
     ctx.fillText('🦷 あなたはどの歯科衛生士？ 🦷', 540, 200);
 
@@ -275,53 +275,53 @@ async function downloadResultImage(event) {
     ctx.lineWidth = 4;
     ctx.stroke();
 
-    // キャラクター名（可愛いフォント）
-    ctx.fillStyle = '#FF6B9D';
-    ctx.font = 'bold 72px "Comic Sans MS", "Arial Rounded MT Bold", sans-serif';
+    // キャラクター名（丸ゴシック・優しいピンク）
+    ctx.fillStyle = '#FFB6C1';
+    ctx.font = 'bold 72px "Rounded Mplus 1c", "M PLUS Rounded 1c", "Hiragino Maru Gothic ProN", sans-serif';
     ctx.textAlign = 'center';
     ctx.fillText(character.name, 540, 1240);
 
-    // MBTIタイプ（小さめ）
+    // MBTIタイプ（小さめ・丸ゴシック）
     ctx.fillStyle = '#666';
-    ctx.font = 'bold 32px "Comic Sans MS", sans-serif';
+    ctx.font = 'bold 32px "Rounded Mplus 1c", "M PLUS Rounded 1c", "Hiragino Maru Gothic ProN", sans-serif';
     ctx.fillText(`[ ${character.mbti} タイプ ]`, 540, 1300);
 
     // キャッチフレーズ（POPな感じ）
     ctx.fillStyle = '#2C5F8D';
-    ctx.font = 'bold 32px "Comic Sans MS", sans-serif';
+    ctx.font = 'bold 32px "Rounded Mplus 1c", "M PLUS Rounded 1c", "Arial Rounded MT Bold", sans-serif';
     ctx.textAlign = 'center';
     const maxWidth = 800;
     wrapText(ctx, character.catchphrase, 540, 1370, maxWidth, 50);
 
-    // 可愛い装飾（ハート）
-    ctx.fillStyle = '#FF6B9D';
-    ctx.font = '40px sans-serif';
-    ctx.fillText('💕', 200, 1500);
-    ctx.fillText('💕', 880, 1500);
-    ctx.fillText('✨', 150, 1600);
-    ctx.fillText('✨', 930, 1600);
+    // 可愛い装飾（キラキラのみ）
+    ctx.fillStyle = '#FFD700';
+    ctx.font = '45px sans-serif';
+    ctx.fillText('✨', 150, 1500);
+    ctx.fillText('✨', 930, 1500);
+    ctx.fillText('⭐', 200, 1550);
+    ctx.fillText('⭐', 880, 1550);
 
     // 説明文（白い背景付き）
-    const descY = 1550;
+    const descY = 1600;
     ctx.fillStyle = 'rgba(255, 255, 255, 0.95)';
     ctx.beginPath();
     ctx.roundRect(80, descY, 920, 300, 25);
     ctx.fill();
     
-    // 影をつける
-    ctx.strokeStyle = '#FFB6C1';
-    ctx.lineWidth = 3;
+    // 影をつける（優しいピンク）
+    ctx.strokeStyle = '#FFC0CB';
+    ctx.lineWidth = 4;
     ctx.stroke();
 
-    // 説明文のタイトル
-    ctx.fillStyle = '#FF6B9D';
-    ctx.font = 'bold 28px "Comic Sans MS", sans-serif';
+    // 説明文のタイトル（優しいピンク）
+    ctx.fillStyle = '#FFB6C1';
+    ctx.font = 'bold 28px "Rounded Mplus 1c", "M PLUS Rounded 1c", "Hiragino Maru Gothic ProN", sans-serif';
     ctx.textAlign = 'center';
     ctx.fillText('✨ あなたの特徴 ✨', 540, descY + 45);
 
     // 説明文の本文
     ctx.fillStyle = '#333';
-    ctx.font = '24px "Comic Sans MS", sans-serif';
+    ctx.font = '24px "Rounded Mplus 1c", "M PLUS Rounded 1c", "Hiragino Maru Gothic ProN", sans-serif';
     ctx.textAlign = 'center';
     wrapText(ctx, character.description, 540, descY + 100, 840, 38);
 
