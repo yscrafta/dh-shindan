@@ -282,8 +282,8 @@ async function downloadResultImage(event) {
     ctx.fillText(character.name, 540, 1240);
 
     // MBTIタイプ（小さめ・丸ゴシック）
-    ctx.fillStyle = '#666';
-    ctx.font = 'bold 32px "Rounded Mplus 1c", "M PLUS Rounded 1c", "Hiragino Maru Gothic ProN", sans-serif';
+    ctx.fillStyle = '#999';
+    ctx.font = 'bold 28px "Rounded Mplus 1c", "M PLUS Rounded 1c", "Hiragino Maru Gothic ProN", sans-serif';
     ctx.fillText(`[ ${character.mbti} タイプ ]`, 540, 1300);
 
     // キャッチフレーズ（POPな感じ）
@@ -293,37 +293,14 @@ async function downloadResultImage(event) {
     const maxWidth = 800;
     wrapText(ctx, character.catchphrase, 540, 1370, maxWidth, 50);
 
-    // 可愛い装飾（キラキラのみ）
-    ctx.fillStyle = '#FFD700';
-    ctx.font = '45px sans-serif';
-    ctx.fillText('✨', 150, 1500);
-    ctx.fillText('✨', 930, 1500);
-    ctx.fillText('⭐', 200, 1550);
-    ctx.fillText('⭐', 880, 1550);
+    // 説明文（枠なし・シンプル）
+    const descY = 1500;
 
-    // 説明文（白い背景付き）
-    const descY = 1600;
-    ctx.fillStyle = 'rgba(255, 255, 255, 0.95)';
-    ctx.beginPath();
-    ctx.roundRect(80, descY, 920, 300, 25);
-    ctx.fill();
-    
-    // 影をつける（優しいピンク）
-    ctx.strokeStyle = '#FFC0CB';
-    ctx.lineWidth = 4;
-    ctx.stroke();
-
-    // 説明文のタイトル（優しいピンク）
-    ctx.fillStyle = '#FFB6C1';
-    ctx.font = 'bold 28px "Rounded Mplus 1c", "M PLUS Rounded 1c", "Hiragino Maru Gothic ProN", sans-serif';
-    ctx.textAlign = 'center';
-    ctx.fillText('✨ あなたの特徴 ✨', 540, descY + 45);
-
-    // 説明文の本文
+    // 説明文の本文のみ（タイトルなし）
     ctx.fillStyle = '#333';
-    ctx.font = '24px "Rounded Mplus 1c", "M PLUS Rounded 1c", "Hiragino Maru Gothic ProN", sans-serif';
+    ctx.font = '26px "Rounded Mplus 1c", "M PLUS Rounded 1c", "Hiragino Maru Gothic ProN", sans-serif';
     ctx.textAlign = 'center';
-    wrapText(ctx, character.description, 540, descY + 100, 840, 38);
+    wrapText(ctx, character.description, 540, descY, 840, 40);
 
     // ボタンを元に戻す
     btn.textContent = originalText;
