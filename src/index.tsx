@@ -1,19 +1,19 @@
 import { Hono } from 'hono'
-import { serveStatic } from 'hono/cloudflare-pages'
+import type { Context } from 'hono'
 
 const app = new Hono()
 
-// 静的ファイルの配信
-app.get('/static/*', serveStatic())
-app.get('/index.html', serveStatic({ path: './index.html' }))
-app.get('/select-type.html', serveStatic({ path: './select-type.html' }))
-app.get('/question.html', serveStatic({ path: './question.html' }))
-app.get('/result.html', serveStatic({ path: './result.html' }))
-app.get('/', serveStatic({ path: './index.html' }))
+// 静的ファイルは _routes.json で Cloudflare Pages が自動配信
+// このWorkerはAPIルートのみ処理
 
 // APIルート
-app.get('/api/hello', (c) => {
+app.get('/api/hello', (c: Context) => {
   return c.json({ message: 'Hello from Hono!' })
+})
+
+// すべての静的リクエストは404を返し、Cloudflare Pagesにフォールバック
+app.get('*', (c: Context) => {
+  return c.notFound()
 })
 
 export default app
