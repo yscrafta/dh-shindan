@@ -62,13 +62,13 @@ function drawRadarChart() {
   
   // キャンバスのサイズを設定（レスポンシブ対応）
   const container = canvas.parentElement;
-  const size = Math.min(container.clientWidth - 60, 400);
+  const size = Math.min(container.clientWidth - 60, 350);  // 400 → 350に縮小
   canvas.width = size;
   canvas.height = size;
   
   const centerX = canvas.width / 2;
   const centerY = canvas.height / 2;
-  const maxRadius = size * 0.35;
+  const maxRadius = size * 0.3;  // 0.35 → 0.3に縮小
   const levels = 5;
   const labels = ['共感力', '技術力', 'コミュ力', '積極性', '柔軟性'];
   const data = character.radar;
@@ -116,19 +116,19 @@ function drawRadarChart() {
   
   for (let i = 0; i < labels.length; i++) {
     const angle = (Math.PI * 2 / labels.length) * i - Math.PI / 2;
-    const labelRadius = maxRadius + 40;
+    const labelRadius = maxRadius + 35;  // 40 → 35に調整
     const x = centerX + labelRadius * Math.cos(angle);
     const y = centerY + labelRadius * Math.sin(angle);
     
     // 背景の白い円を描画
     ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
     ctx.beginPath();
-    ctx.arc(x, y, 25, 0, Math.PI * 2);
+    ctx.arc(x, y, 22, 0, Math.PI * 2);  // 25 → 22に縮小
     ctx.fill();
     
     // ラベルテキストを描画
     ctx.fillStyle = '#2C5F8D';
-    ctx.font = 'bold 16px "M PLUS Rounded 1c", sans-serif';
+    ctx.font = 'bold 14px "M PLUS Rounded 1c", sans-serif';  // 16px → 14pxに縮小
     ctx.fillText(labels[i], x, y);
   }
 
@@ -295,34 +295,70 @@ async function downloadResultImage(event) {
     ctx.font = '20px sans-serif';
     ctx.fillText('https://dental-hygienist-diagnosis.pages.dev/', 540, 1800);
 
-    // 画像をダウンロード
-    canvas.toBlob(function(blob) {
-      if (!blob) {
-        throw new Error('画像の生成に失敗しました');
-      }
-      
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `歯科衛生士診断_${character.name}.png`;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
-      
-      // ボタンを元に戻す
-      btn.textContent = originalText;
-      btn.disabled = false;
-      
-      // 成功メッセージ
-      setTimeout(() => {
-        alert('画像を保存しました！📸\n\n写真アプリまたはダウンロードフォルダをご確認ください。');
-      }, 300);
-    }, 'image/png', 1.0);
+    // ボタンを元に戻す
+    btn.textContent = originalText;
+    btn.disabled = false;
+
+    // 画像を新しいタブで表示（モバイル対応）
+    const dataUrl = canvas.toDataURL('image/png', 1.0);
+    const newWindow = window.open();
+    
+    if (newWindow) {
+      newWindow.document.write(`
+        <!DOCTYPE html>
+        <html>
+        <head>
+          <meta charset="UTF-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <title>診断結果画像</title>
+          <style>
+            body {
+              margin: 0;
+              padding: 20px;
+              background: #f0f0f0;
+              display: flex;
+              flex-direction: column;
+              align-items: center;
+              font-family: sans-serif;
+            }
+            img {
+              max-width: 100%;
+              height: auto;
+              box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+              border-radius: 10px;
+            }
+            p {
+              margin: 20px 0;
+              text-align: center;
+              color: #333;
+              font-size: 16px;
+              line-height: 1.6;
+            }
+            .note {
+              background: white;
+              padding: 15px;
+              border-radius: 8px;
+              margin-top: 10px;
+            }
+          </style>
+        </head>
+        <body>
+          <img src="${dataUrl}" alt="診断結果" />
+          <div class="note">
+            <p><strong>📸 画像を保存する方法</strong></p>
+            <p>画像を<strong>長押し</strong>して「画像を保存」を選択してください</p>
+          </div>
+        </body>
+        </html>
+      `);
+    } else {
+      // ポップアップがブロックされた場合
+      alert('画像を表示できませんでした。\nポップアップブロックを解除してください。');
+    }
     
   } catch (error) {
     console.error('画像生成エラー:', error);
-    alert('画像の生成に失敗しました。もう一度お試しください。');
+    alert('画像の生成に失敗しました。\nもう一度お試しください。');
     btn.textContent = originalText;
     btn.disabled = false;
   }
