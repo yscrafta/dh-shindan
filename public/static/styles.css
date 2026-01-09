@@ -113,6 +113,24 @@ button, .btn {
   box-shadow: 0 6px 20px rgba(128, 191, 255, 0.4);
 }
 
+.top-btn {
+  background: linear-gradient(135deg, #A7D1E9 0%, #87CEEB 100%);
+  color: white;
+  font-size: 1.2rem;
+  padding: 15px 60px;
+  border-radius: 50px;
+  font-weight: 700;
+  cursor: pointer;
+  border: none;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(167, 209, 233, 0.3);
+}
+
+.top-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(167, 209, 233, 0.5);
+}
+
 .back-btn {
   background: #E0E0E0;
   color: #666;
