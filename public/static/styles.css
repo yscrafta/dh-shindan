@@ -394,12 +394,14 @@ button, .btn {
   transition: all 0.3s ease;
 }
 
-.share-btn.twitter {
-  background: linear-gradient(135deg, #1DA1F2 0%, #0D8BD9 100%);
+.share-btn.tiktok {
+  background: linear-gradient(135deg, #000000 0%, #EE1D52 50%, #69C9D0 100%);
+  cursor: pointer;
 }
 
-.share-btn.line {
-  background: linear-gradient(135deg, #00C300 0%, #00A000 100%);
+.share-btn.instagram {
+  background: linear-gradient(135deg, #833AB4 0%, #FD1D1D 50%, #FCB045 100%);
+  cursor: pointer;
 }
 
 .share-btn:hover {

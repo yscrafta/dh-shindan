@@ -155,13 +155,19 @@ function setupShareButtons() {
   const currentUrl = window.location.href;
   const shareText = `私は「${character.name}」でした！\n${character.catchphrase}\n\nあなたはどの歯科衛生士？`;
   
-  // Twitter
-  const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(currentUrl)}`;
-  document.getElementById('twitterShare').href = twitterUrl;
+  // TikTok（モバイルアプリ起動 or ウェブ）
+  const tiktokBtn = document.getElementById('tiktokShare');
+  tiktokBtn.onclick = function(e) {
+    e.preventDefault();
+    alert('TikTokアプリでこの画像を共有してください！\n\n「📸 結果画像をダウンロード」ボタンで画像を保存できます。');
+  };
 
-  // LINE
-  const lineUrl = `https://social-plugins.line.me/lineit/share?url=${encodeURIComponent(currentUrl)}&text=${encodeURIComponent(shareText)}`;
-  document.getElementById('lineShare').href = lineUrl;
+  // Instagram（モバイルアプリ起動 or ウェブ）
+  const instagramBtn = document.getElementById('instagramShare');
+  instagramBtn.onclick = function(e) {
+    e.preventDefault();
+    alert('Instagramストーリーでこの画像を共有してください！\n\n「📸 結果画像をダウンロード」ボタンで画像を保存できます。');
+  };
 }
 
 // もう一度診断する
@@ -171,4 +177,106 @@ function retryDiagnosis() {
   localStorage.removeItem('current_question');
   localStorage.removeItem('user_type');
   window.location.href = '/';
+}
+
+// 結果画像をダウンロード
+function downloadResultImage() {
+  const canvas = document.createElement('canvas');
+  canvas.width = 1080;
+  canvas.height = 1920;
+  const ctx = canvas.getContext('2d');
+
+  // 背景のグラデーション
+  const gradient = ctx.createLinearGradient(0, 0, 0, 1920);
+  gradient.addColorStop(0, '#A7D1E9');
+  gradient.addColorStop(0.5, '#B8D2E5');
+  gradient.addColorStop(1, '#FCD5DE');
+  ctx.fillStyle = gradient;
+  ctx.fillRect(0, 0, 1080, 1920);
+
+  // タイトル
+  ctx.fillStyle = '#333';
+  ctx.font = 'bold 48px "M PLUS Rounded 1c", sans-serif';
+  ctx.textAlign = 'center';
+  ctx.fillText('あなたはどの歯科衛生士？', 540, 100);
+
+  // キャラクター画像を読み込んで描画
+  const img = new Image();
+  img.crossOrigin = 'anonymous';
+  img.onload = function() {
+    // キャラクター画像（中央）
+    const imgWidth = 600;
+    const imgHeight = 600;
+    const imgX = (1080 - imgWidth) / 2;
+    const imgY = 200;
+    ctx.drawImage(img, imgX, imgY, imgWidth, imgHeight);
+
+    // キャラクター名
+    ctx.fillStyle = '#FF6B9D';
+    ctx.font = 'bold 64px "M PLUS Rounded 1c", sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText(character.name, 540, 900);
+
+    // MBTIタイプ
+    ctx.fillStyle = '#666';
+    ctx.font = 'bold 36px "M PLUS Rounded 1c", sans-serif';
+    ctx.fillText(character.mbti, 540, 960);
+
+    // キャッチフレーズ
+    ctx.fillStyle = '#333';
+    ctx.font = '32px "M PLUS Rounded 1c", sans-serif';
+    ctx.textAlign = 'center';
+    const maxWidth = 900;
+    wrapText(ctx, character.catchphrase, 540, 1040, maxWidth, 50);
+
+    // 説明文
+    ctx.font = '24px "M PLUS Rounded 1c", sans-serif';
+    wrapText(ctx, character.description, 540, 1200, maxWidth, 40);
+
+    // 公式LINE誘導
+    ctx.fillStyle = '#00B900';
+    ctx.font = 'bold 28px "M PLUS Rounded 1c", sans-serif';
+    ctx.fillText('📱 公式LINEでより詳しい診断をゲット！', 540, 1700);
+
+    // QRコード風の案内
+    ctx.fillStyle = '#666';
+    ctx.font = '20px "M PLUS Rounded 1c", sans-serif';
+    ctx.fillText('診断サイト: https://lin.ee/PJoKVxPo', 540, 1800);
+
+    // 画像をダウンロード
+    canvas.toBlob(function(blob) {
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `歯科衛生士診断_${character.name}.png`;
+      a.click();
+      URL.revokeObjectURL(url);
+    }, 'image/png');
+  };
+  img.src = character.image;
+}
+
+// テキストを折り返して描画
+function wrapText(ctx, text, x, y, maxWidth, lineHeight) {
+  const words = text.split('');
+  let line = '';
+  let testLine = '';
+  let lineArray = [];
+  
+  for (let n = 0; n < words.length; n++) {
+    testLine = line + words[n];
+    const metrics = ctx.measureText(testLine);
+    const testWidth = metrics.width;
+    if (testWidth > maxWidth && n > 0) {
+      lineArray.push(line);
+      line = words[n];
+    } else {
+      line = testLine;
+    }
+  }
+  lineArray.push(line);
+  
+  for (let k = 0; k < lineArray.length; k++) {
+    ctx.fillText(lineArray[k], x, y + (k * lineHeight));
+  }
 }

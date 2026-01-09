@@ -102,7 +102,7 @@ const studentQuestions = [
     choices: [
       { text: 'A) まだ分からない・色々試したい', scores: { P: 2, N: 1 } },
       { text: 'B) 専門性を高めたい', scores: { T: 2, J: 1 } },
-      { text: 'C) 長く続けられる衛生士', scores: { S: 1, J: 1 } }
+      { text: 'C) 自分らしく働ける衛生士', scores: { I: 1, P: 1 } }
     ]
   },
   {
