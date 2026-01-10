@@ -48,9 +48,16 @@
                 📱 公式LINEでより詳しい診断をゲット！
             </a>
 
-            <!-- 画像ダウンロードボタン -->
+            <!-- 生成された画像プレビュー -->
+            <div class="image-preview-container" id="imagePreviewContainer" style="display: none;">
+                <h3 style="text-align: center; color: #FF6B9D; margin-bottom: 20px;">📸 シェア用画像</h3>
+                <img id="resultImagePreview" src="" alt="診断結果画像" style="width: 100%; max-width: 500px; margin: 0 auto; display: block; border-radius: 15px; box-shadow: 0 8px 24px rgba(0,0,0,0.15);">
+                <p style="text-align: center; color: #666; margin-top: 15px; font-size: 0.9rem;">画像を長押しして保存できます</p>
+            </div>
+
+            <!-- 画像表示ボタン -->
             <div class="btn-container">
-                <button class="primary-btn" onclick="downloadResultImage(event)">📸 結果画像をダウンロード</button>
+                <button class="primary-btn" id="showImageBtn" onclick="showResultImage(event)">📸 結果画像を表示</button>
             </div>
 
             <!-- シェアボタン -->

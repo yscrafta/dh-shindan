@@ -226,35 +226,59 @@ async function generateResultImage() {
     canvas.height = 1920;
     const ctx = canvas.getContext('2d');
 
-    // 背景のグラデーション（パステル調）
+    // 背景のグラデーション（歯科医院の清潔感）
     const gradient = ctx.createLinearGradient(0, 0, 0, 1920);
-    gradient.addColorStop(0, '#FFE5EC');
-    gradient.addColorStop(0.3, '#FFF0F5');
-    gradient.addColorStop(0.6, '#E8F4F8');
-    gradient.addColorStop(1, '#D4E9F7');
+    gradient.addColorStop(0, '#E8F5FF');  // 清潔な水色
+    gradient.addColorStop(0.5, '#F0F8FF');  // アリスブルー
+    gradient.addColorStop(1, '#FFF5F8');  // 優しいピンク
     ctx.fillStyle = gradient;
     ctx.fillRect(0, 0, 1080, 1920);
 
-    // 可愛い装飾（背景の水玉模様）
-    ctx.fillStyle = 'rgba(255, 182, 193, 0.15)';
-    for (let i = 0; i < 20; i++) {
-      const x = Math.random() * 1080;
-      const y = Math.random() * 1920;
-      const radius = Math.random() * 40 + 20;
-      ctx.beginPath();
-      ctx.arc(x, y, radius, 0, Math.PI * 2);
-      ctx.fill();
-    }
-
-    // タイトルの背景（白い帯）
-    ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
-    ctx.fillRect(0, 120, 1080, 120);
+    // 歯科器具のイラスト（背景装飾）
+    ctx.save();
+    ctx.globalAlpha = 0.08;
+    ctx.font = '120px sans-serif';
     
-    // タイトル（可愛いフォント）
-    ctx.fillStyle = '#FF6B9D';
-    ctx.font = 'bold 56px "M PLUS Rounded 1c", sans-serif';
+    // 歯のイラスト
+    ctx.fillText('🦷', 100, 200);
+    ctx.fillText('🦷', 850, 400);
+    ctx.fillText('🦷', 150, 1600);
+    ctx.fillText('🦷', 880, 1800);
+    
+    // 歯ブラシ
+    ctx.fillText('🪥', 80, 800);
+    ctx.fillText('🪥', 900, 1200);
+    
+    // ミラー・器具
+    ctx.fillText('🪞', 850, 600);
+    ctx.fillText('💎', 120, 1400);
+    
+    ctx.restore();
+
+    // 上部の白いヘッダー帯（歯科医院の清潔感）
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.95)';
+    ctx.shadowColor = 'rgba(0, 0, 0, 0.1)';
+    ctx.shadowBlur = 20;
+    ctx.shadowOffsetY = 5;
+    ctx.fillRect(0, 80, 1080, 180);
+    ctx.shadowColor = 'transparent';
+    
+    // 白十字マーク（医療感）
+    ctx.fillStyle = '#4FC3F7';
+    ctx.fillRect(50, 140, 15, 60);
+    ctx.fillRect(27, 162, 60, 15);
+    ctx.fillRect(993, 140, 15, 60);
+    ctx.fillRect(970, 162, 60, 15);
+
+    // タイトル
+    ctx.fillStyle = '#00ACC1';
+    ctx.font = 'bold 52px "M PLUS Rounded 1c", sans-serif';
     ctx.textAlign = 'center';
-    ctx.fillText('🦷 あなたはどの歯科衛生士？ 🦷', 540, 195);
+    ctx.fillText('🦷 あなたはどの歯科衛生士？', 540, 160);
+    
+    ctx.fillStyle = '#FF6B9D';
+    ctx.font = 'bold 32px "M PLUS Rounded 1c", sans-serif';
+    ctx.fillText('キャラ診断結果', 540, 210);
 
     // 画像をfetchで取得
     const response = await fetch(character.image);
@@ -269,110 +293,120 @@ async function generateResultImage() {
       img.src = imageUrl;
     });
 
-    // キャラクター画像用の白い円形背景（影付き）
+    // キャラクター画像用の白い円形背景（歯のような白さ）
     ctx.shadowColor = 'rgba(0, 0, 0, 0.15)';
     ctx.shadowBlur = 30;
     ctx.shadowOffsetX = 0;
     ctx.shadowOffsetY = 10;
-    ctx.fillStyle = 'white';
+    ctx.fillStyle = '#FFFFFF';
     ctx.beginPath();
-    ctx.arc(540, 650, 380, 0, Math.PI * 2);
+    ctx.arc(540, 550, 320, 0, Math.PI * 2);
     ctx.fill();
     ctx.shadowColor = 'transparent';
+    
+    // 水色の円（歯科医院カラー）
+    ctx.strokeStyle = '#4FC3F7';
+    ctx.lineWidth = 8;
+    ctx.beginPath();
+    ctx.arc(540, 550, 320, 0, Math.PI * 2);
+    ctx.stroke();
 
     // キャラクター画像を円形にクリップして描画
     ctx.save();
     ctx.beginPath();
-    ctx.arc(540, 650, 350, 0, Math.PI * 2);
+    ctx.arc(540, 550, 300, 0, Math.PI * 2);
     ctx.clip();
-    ctx.drawImage(img, 190, 300, 700, 700);
+    ctx.drawImage(img, 240, 250, 600, 600);
     ctx.restore();
     
     URL.revokeObjectURL(imageUrl);
 
-    // キャラクター名の背景（ピンクのリボン風）
-    const ribbonY = 1050;
+    // キャラクター名エリア（歯科医院の清潔感）
+    const nameY = 920;
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.98)';
+    ctx.shadowColor = 'rgba(0, 0, 0, 0.1)';
+    ctx.shadowBlur = 20;
+    ctx.shadowOffsetY = 5;
+    ctx.beginPath();
+    ctx.roundRect(80, nameY, 920, 120, 20);
+    ctx.fill();
+    ctx.shadowColor = 'transparent';
+    
+    // 上下のボーダー（医療感）
+    ctx.strokeStyle = '#4FC3F7';
+    ctx.lineWidth = 5;
+    ctx.beginPath();
+    ctx.roundRect(80, nameY, 920, 120, 20);
+    ctx.stroke();
+
+    // キャラクター名
     ctx.fillStyle = '#FF6B9D';
-    ctx.beginPath();
-    ctx.moveTo(100, ribbonY);
-    ctx.lineTo(980, ribbonY);
-    ctx.lineTo(1000, ribbonY + 80);
-    ctx.lineTo(80, ribbonY + 80);
-    ctx.closePath();
-    ctx.fill();
-    
-    // リボンの影
-    ctx.fillStyle = '#FF4081';
-    ctx.beginPath();
-    ctx.moveTo(100, ribbonY + 80);
-    ctx.lineTo(980, ribbonY + 80);
-    ctx.lineTo(990, ribbonY + 90);
-    ctx.lineTo(90, ribbonY + 90);
-    ctx.closePath();
-    ctx.fill();
-
-    // キャラクター名（白文字）
-    ctx.fillStyle = 'white';
-    ctx.font = 'bold 68px "M PLUS Rounded 1c", sans-serif';
+    ctx.font = 'bold 64px "M PLUS Rounded 1c", sans-serif';
     ctx.textAlign = 'center';
-    ctx.fillText(character.name, 540, ribbonY + 58);
+    ctx.fillText(character.name, 540, nameY + 58);
 
-    // MBTIタイプ（ピンクの小さい吹き出し）
-    ctx.fillStyle = '#FFB6C1';
+    // MBTIタイプ
+    ctx.fillStyle = '#00ACC1';
+    ctx.font = 'bold 28px "M PLUS Rounded 1c", sans-serif';
+    ctx.fillText(`[ ${character.mbti} タイプ ]`, 540, nameY + 95);
+
+    // キャッチフレーズエリア
+    const catchY = 1080;
+    ctx.fillStyle = 'rgba(79, 195, 247, 0.15)';
     ctx.beginPath();
-    ctx.roundRect(380, 1150, 320, 60, 30);
+    ctx.roundRect(60, catchY, 960, 100, 20);
     ctx.fill();
     
-    ctx.fillStyle = 'white';
+    ctx.fillStyle = '#00ACC1';
     ctx.font = 'bold 32px "M PLUS Rounded 1c", sans-serif';
-    ctx.fillText(`${character.mbti} タイプ`, 540, 1190);
+    ctx.textAlign = 'center';
+    wrapText(ctx, character.catchphrase, 540, catchY + 40, 900, 45);
 
-    // キャッチフレーズ（白い背景付き）
-    const catchY = 1250;
-    ctx.fillStyle = 'rgba(255, 255, 255, 0.95)';
+    // 歯科器具アイコン（装飾）
+    ctx.font = '40px sans-serif';
+    ctx.fillStyle = '#4FC3F7';
+    ctx.fillText('🪥', 100, catchY + 55);
+    ctx.fillText('🦷', 980, catchY + 55);
+
+    // 説明文エリア（白い清潔なボックス）
+    const descY = 1220;
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.98)';
+    ctx.shadowColor = 'rgba(0, 0, 0, 0.1)';
+    ctx.shadowBlur = 20;
+    ctx.shadowOffsetY = 5;
     ctx.beginPath();
-    ctx.roundRect(60, catchY, 960, 140, 25);
+    ctx.roundRect(60, descY, 960, 520, 25);
     ctx.fill();
+    ctx.shadowColor = 'transparent';
     
-    // キャッチフレーズのテキスト
+    // ボーダー
+    ctx.strokeStyle = '#FFB6C1';
+    ctx.lineWidth = 4;
+    ctx.beginPath();
+    ctx.roundRect(60, descY, 960, 520, 25);
+    ctx.stroke();
+
+    // 説明文のタイトル
     ctx.fillStyle = '#FF6B9D';
     ctx.font = 'bold 36px "M PLUS Rounded 1c", sans-serif';
     ctx.textAlign = 'center';
-    wrapText(ctx, character.catchphrase, 540, catchY + 50, 880, 50);
-
-    // 装飾（ハートとキラキラ）
-    ctx.font = '50px sans-serif';
-    ctx.fillStyle = '#FF6B9D';
-    ctx.fillText('💕', 120, 1430);
-    ctx.fillText('💕', 960, 1430);
-    ctx.fillText('✨', 180, 1500);
-    ctx.fillText('✨', 900, 1500);
-    ctx.fillText('🌸', 150, 1570);
-    ctx.fillText('🌸', 930, 1570);
-
-    // 説明文（白い背景付き）
-    const descY = 1450;
-    ctx.fillStyle = 'rgba(255, 255, 255, 0.95)';
-    ctx.beginPath();
-    ctx.roundRect(80, descY, 920, 360, 25);
-    ctx.fill();
-    
-    // 説明文のタイトル
-    ctx.fillStyle = '#FF6B9D';
-    ctx.font = 'bold 38px "M PLUS Rounded 1c", sans-serif';
-    ctx.textAlign = 'center';
-    ctx.fillText('✨ あなたの特徴 ✨', 540, descY + 50);
+    ctx.fillText('✨ あなたの特徴 ✨', 540, descY + 55);
 
     // 説明文の本文
     ctx.fillStyle = '#555';
-    ctx.font = '28px "M PLUS Rounded 1c", sans-serif';
+    ctx.font = '26px "M PLUS Rounded 1c", sans-serif';
     ctx.textAlign = 'center';
-    wrapText(ctx, character.description, 540, descY + 120, 840, 42);
+    wrapText(ctx, character.description, 540, descY + 120, 880, 40);
 
-    // 下部の招待メッセージ
-    ctx.fillStyle = '#FF6B9D';
-    ctx.font = 'bold 32px "M PLUS Rounded 1c", sans-serif';
-    ctx.fillText('🎀 診断してみてね 🎀', 540, 1860);
+    // 下部の招待メッセージ（歯科医院カラー）
+    ctx.fillStyle = '#4FC3F7';
+    ctx.font = 'bold 38px "M PLUS Rounded 1c", sans-serif';
+    ctx.fillText('🦷 あなたも診断してみてね 🪥', 540, 1800);
+
+    // 小さなロゴ風
+    ctx.fillStyle = '#999';
+    ctx.font = '20px "M PLUS Rounded 1c", sans-serif';
+    ctx.fillText('歯科衛生士キャラ診断', 540, 1870);
 
     // Data URLを生成して保存
     generatedImageUrl = canvas.toDataURL('image/png', 1.0);
@@ -384,12 +418,21 @@ async function generateResultImage() {
 }
 
 // 結果画像を表示（事前生成済みの画像を使用）
-async function downloadResultImage(event) {
+async function showResultImage(event) {
   const btn = event.target;
+  const imagePreviewContainer = document.getElementById('imagePreviewContainer');
+  const resultImagePreview = document.getElementById('resultImagePreview');
   
   // 既に生成済みの画像がある場合
   if (generatedImageUrl) {
-    displayGeneratedImage(generatedImageUrl);
+    resultImagePreview.src = generatedImageUrl;
+    imagePreviewContainer.style.display = 'block';
+    btn.style.display = 'none';
+    
+    // スムーズにスクロール
+    setTimeout(() => {
+      imagePreviewContainer.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }, 100);
     return;
   }
   
@@ -402,11 +445,15 @@ async function downloadResultImage(event) {
     // 画像生成を待つ
     await generateResultImage();
     
-    btn.textContent = originalText;
-    btn.disabled = false;
-    
     if (generatedImageUrl) {
-      displayGeneratedImage(generatedImageUrl);
+      resultImagePreview.src = generatedImageUrl;
+      imagePreviewContainer.style.display = 'block';
+      btn.style.display = 'none';
+      
+      // スムーズにスクロール
+      setTimeout(() => {
+        imagePreviewContainer.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }, 100);
     }
   } catch (error) {
     console.error('画像生成エラー:', error);
@@ -416,67 +463,9 @@ async function downloadResultImage(event) {
   }
 }
 
-// 生成済み画像を新しいタブで表示
-function displayGeneratedImage(dataUrl) {
-  const newWindow = window.open();
-  
-  if (newWindow) {
-    newWindow.document.write(`
-      <!DOCTYPE html>
-      <html>
-      <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>診断結果画像</title>
-        <style>
-          body {
-            margin: 0;
-            padding: 20px;
-            background: linear-gradient(180deg, #A7D1E9 0%, #FCD5DE 100%);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            font-family: 'M PLUS Rounded 1c', sans-serif;
-          }
-          img {
-            max-width: 100%;
-            height: auto;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.2);
-            border-radius: 15px;
-          }
-          .note {
-            background: white;
-            padding: 20px;
-            border-radius: 15px;
-            margin-top: 20px;
-            max-width: 500px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-          }
-          p {
-            margin: 10px 0;
-            text-align: center;
-            color: #333;
-            font-size: 16px;
-            line-height: 1.8;
-          }
-          strong {
-            color: #FF6B9D;
-          }
-        </style>
-      </head>
-      <body>
-        <img src="${dataUrl}" alt="診断結果" />
-        <div class="note">
-          <p><strong>📸 画像を保存する方法</strong></p>
-          <p>画像を<strong>長押し</strong>して<br>「画像を保存」を選択してください</p>
-          <p>💕 SNSでシェアしてね 💕</p>
-        </div>
-      </body>
-      </html>
-    `);
-  } else {
-    alert('画像を表示できませんでした。\nポップアップブロックを解除してください。');
-  }
+// 旧関数（互換性のため残す）
+async function downloadResultImage(event) {
+  return showResultImage(event);
 }
 
 function wrapText(ctx, text, x, y, maxWidth, lineHeight) {

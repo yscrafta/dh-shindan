@@ -410,6 +410,15 @@ button, .btn {
   flex-wrap: wrap;
 }
 
+/* 画像プレビュー */
+.image-preview-container {
+  margin: 40px 0;
+  padding: 30px;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 20px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+}
+
 /* LINE誘導ボタン（特に目立つデザイン） */
 .line-cta-btn {
   background: linear-gradient(135deg, #00C300 0%, #00A000 100%);
