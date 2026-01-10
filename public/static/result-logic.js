@@ -28,7 +28,6 @@ function displayResult() {
   document.getElementById('characterImage').src = character.image;
   document.getElementById('characterImage').alt = character.name;
   document.getElementById('typeName').textContent = character.name;
-  document.getElementById('mbtiType').textContent = character.mbti;
   document.getElementById('catchphrase').textContent = character.catchphrase;
   document.getElementById('description').textContent = character.description;
   
@@ -332,7 +331,7 @@ async function generateResultImage() {
     ctx.shadowBlur = 20;
     ctx.shadowOffsetY = 5;
     ctx.beginPath();
-    ctx.roundRect(80, nameY, 920, 120, 20);
+    ctx.roundRect(80, nameY, 920, 100, 20);
     ctx.fill();
     ctx.shadowColor = 'transparent';
     
@@ -340,22 +339,19 @@ async function generateResultImage() {
     ctx.strokeStyle = '#4FC3F7';
     ctx.lineWidth = 5;
     ctx.beginPath();
-    ctx.roundRect(80, nameY, 920, 120, 20);
+    ctx.roundRect(80, nameY, 920, 100, 20);
     ctx.stroke();
 
-    // キャラクター名
+    // キャラクター名（中央配置）
     ctx.fillStyle = '#FF6B9D';
     ctx.font = 'bold 64px "M PLUS Rounded 1c", sans-serif';
     ctx.textAlign = 'center';
-    ctx.fillText(character.name, 540, nameY + 58);
-
-    // MBTIタイプ
-    ctx.fillStyle = '#00ACC1';
-    ctx.font = 'bold 28px "M PLUS Rounded 1c", sans-serif';
-    ctx.fillText(`[ ${character.mbti} タイプ ]`, 540, nameY + 95);
+    ctx.textBaseline = 'middle';
+    ctx.fillText(character.name, 540, nameY + 50);
+    ctx.textBaseline = 'alphabetic';
 
     // キャッチフレーズエリア
-    const catchY = 1080;
+    const catchY = 1060;
     ctx.fillStyle = 'rgba(79, 195, 247, 0.15)';
     ctx.beginPath();
     ctx.roundRect(60, catchY, 960, 100, 20);
