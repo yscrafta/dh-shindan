@@ -234,24 +234,25 @@ async function generateResultImage() {
     ctx.fillStyle = gradient;
     ctx.fillRect(0, 0, 1080, 1920);
 
-    // 歯科器具のイラスト（背景装飾）
+    // 歯科器具のイラスト（背景装飾 - 歯ブラシと歯のみ）
     ctx.save();
     ctx.globalAlpha = 0.08;
     ctx.font = '120px sans-serif';
     
     // 歯のイラスト
-    ctx.fillText('🦷', 100, 200);
-    ctx.fillText('🦷', 850, 400);
-    ctx.fillText('🦷', 150, 1600);
-    ctx.fillText('🦷', 880, 1800);
+    ctx.fillText('🦷', 100, 250);
+    ctx.fillText('🦷', 900, 350);
+    ctx.fillText('🦷', 120, 900);
+    ctx.fillText('🦷', 880, 1000);
+    ctx.fillText('🦷', 150, 1500);
+    ctx.fillText('🦷', 850, 1700);
     
     // 歯ブラシ
-    ctx.fillText('🪥', 80, 800);
-    ctx.fillText('🪥', 900, 1200);
-    
-    // ミラー・器具
-    ctx.fillText('🪞', 850, 600);
-    ctx.fillText('💎', 120, 1400);
+    ctx.fillText('🪥', 850, 250);
+    ctx.fillText('🪥', 120, 500);
+    ctx.fillText('🪥', 900, 900);
+    ctx.fillText('🪥', 100, 1300);
+    ctx.fillText('🪥', 880, 1500);
     
     ctx.restore();
 
