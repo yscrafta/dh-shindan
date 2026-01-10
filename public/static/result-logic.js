@@ -31,6 +31,9 @@ function displayResult() {
   document.getElementById('mbtiType').textContent = character.mbti;
   document.getElementById('catchphrase').textContent = character.catchphrase;
   document.getElementById('description').textContent = character.description;
+  
+  // LINEボタン上部のキャラ名リマインダーにも表示
+  document.getElementById('characterNameReminder').textContent = character.name;
 
   // 向いている働き方
   const workStyleList = document.getElementById('workStyleList');
