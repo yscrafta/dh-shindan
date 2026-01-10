@@ -357,10 +357,13 @@ async function generateResultImage() {
     ctx.roundRect(60, catchY, 960, 100, 20);
     ctx.fill();
     
+    // キャッチフレーズを中央に配置
     ctx.fillStyle = '#00ACC1';
-    ctx.font = 'bold 32px "M PLUS Rounded 1c", sans-serif';
+    ctx.font = 'bold 36px "M PLUS Rounded 1c", sans-serif';
     ctx.textAlign = 'center';
-    wrapText(ctx, character.catchphrase, 540, catchY + 40, 900, 45);
+    ctx.textBaseline = 'middle';
+    wrapText(ctx, character.catchphrase, 540, catchY + 55, 900, 45);
+    ctx.textBaseline = 'alphabetic';
 
     // 歯科器具アイコン（装飾）
     ctx.font = '40px sans-serif';
@@ -392,11 +395,11 @@ async function generateResultImage() {
     ctx.textAlign = 'center';
     ctx.fillText('✨ あなたの特徴 ✨', 540, descY + 55);
 
-    // 説明文の本文
+    // 説明文の本文（フォントサイズを大きく）
     ctx.fillStyle = '#555';
-    ctx.font = '26px "M PLUS Rounded 1c", sans-serif';
+    ctx.font = '32px "M PLUS Rounded 1c", sans-serif';
     ctx.textAlign = 'center';
-    wrapText(ctx, character.description, 540, descY + 120, 880, 40);
+    wrapText(ctx, character.description, 540, descY + 130, 880, 48);
 
     // 下部の招待メッセージ（歯科医院カラー）
     ctx.fillStyle = '#4FC3F7';
