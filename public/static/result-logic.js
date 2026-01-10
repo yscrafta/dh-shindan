@@ -12,10 +12,15 @@ if (!character) {
   window.location.href = '/';
 }
 
-// ページ読み込み時に結果を表示
-window.addEventListener('DOMContentLoaded', function() {
+// グローバル変数で画像URLを保持
+let generatedImageUrl = null;
+
+// ページ読み込み時に結果を表示して画像を生成
+window.addEventListener('DOMContentLoaded', async function() {
   displayResult();
   drawRadarChart();
+  // バックグラウンドで画像を生成
+  await generateResultImage();
 });
 
 // 結果を表示
@@ -213,35 +218,45 @@ function startDiagnosis() {
   window.location.href = '/';
 }
 
-// 結果画像をダウンロード
-async function downloadResultImage(event) {
-  // ローディング表示
-  const btn = event.target;
-  const originalText = btn.textContent;
-  btn.textContent = '生成中...';
-  btn.disabled = true;
-  
+// 結果画像を事前生成（バックグラウンド）
+async function generateResultImage() {
   try {
     const canvas = document.createElement('canvas');
     canvas.width = 1080;
     canvas.height = 1920;
     const ctx = canvas.getContext('2d');
 
-    // 背景のグラデーション
+    // 背景のグラデーション（パステル調）
     const gradient = ctx.createLinearGradient(0, 0, 0, 1920);
-    gradient.addColorStop(0, '#A7D1E9');
-    gradient.addColorStop(0.5, '#B8D2E5');
-    gradient.addColorStop(1, '#FCD5DE');
+    gradient.addColorStop(0, '#FFE5EC');
+    gradient.addColorStop(0.3, '#FFF0F5');
+    gradient.addColorStop(0.6, '#E8F4F8');
+    gradient.addColorStop(1, '#D4E9F7');
     ctx.fillStyle = gradient;
     ctx.fillRect(0, 0, 1080, 1920);
 
-    // タイトル（丸ゴシック）
-    ctx.fillStyle = '#2C5F8D';
-    ctx.font = 'bold 52px "Rounded Mplus 1c", "M PLUS Rounded 1c", "Hiragino Maru Gothic ProN", sans-serif';
-    ctx.textAlign = 'center';
-    ctx.fillText('🦷 あなたはどの歯科衛生士？ 🦷', 540, 200);
+    // 可愛い装飾（背景の水玉模様）
+    ctx.fillStyle = 'rgba(255, 182, 193, 0.15)';
+    for (let i = 0; i < 20; i++) {
+      const x = Math.random() * 1080;
+      const y = Math.random() * 1920;
+      const radius = Math.random() * 40 + 20;
+      ctx.beginPath();
+      ctx.arc(x, y, radius, 0, Math.PI * 2);
+      ctx.fill();
+    }
 
-    // 画像をfetchで取得してからcanvasに描画
+    // タイトルの背景（白い帯）
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+    ctx.fillRect(0, 120, 1080, 120);
+    
+    // タイトル（可愛いフォント）
+    ctx.fillStyle = '#FF6B9D';
+    ctx.font = 'bold 56px "M PLUS Rounded 1c", sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('🦷 あなたはどの歯科衛生士？ 🦷', 540, 195);
+
+    // 画像をfetchで取得
     const response = await fetch(character.image);
     const blob = await response.blob();
     const imageUrl = URL.createObjectURL(blob);
@@ -254,115 +269,145 @@ async function downloadResultImage(event) {
       img.src = imageUrl;
     });
 
-    // キャラクター画像（中央・白い円なし）
-    const imgWidth = 700;
-    const imgHeight = 700;
-    const imgX = (1080 - imgWidth) / 2;
-    const imgY = 350;
-    
-    ctx.drawImage(img, imgX, imgY, imgWidth, imgHeight);
+    // キャラクター画像用の白い円形背景（影付き）
+    ctx.shadowColor = 'rgba(0, 0, 0, 0.15)';
+    ctx.shadowBlur = 30;
+    ctx.shadowOffsetX = 0;
+    ctx.shadowOffsetY = 10;
+    ctx.fillStyle = 'white';
+    ctx.beginPath();
+    ctx.arc(540, 650, 380, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.shadowColor = 'transparent';
+
+    // キャラクター画像を円形にクリップして描画
+    ctx.save();
+    ctx.beginPath();
+    ctx.arc(540, 650, 350, 0, Math.PI * 2);
+    ctx.clip();
+    ctx.drawImage(img, 190, 300, 700, 700);
+    ctx.restore();
     
     URL.revokeObjectURL(imageUrl);
 
-    // 可愛い吹き出し風の背景
-    ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
+    // キャラクター名の背景（ピンクのリボン風）
+    const ribbonY = 1050;
+    ctx.fillStyle = '#FF6B9D';
     ctx.beginPath();
-    ctx.roundRect(100, 1150, 880, 280, 30);
+    ctx.moveTo(100, ribbonY);
+    ctx.lineTo(980, ribbonY);
+    ctx.lineTo(1000, ribbonY + 80);
+    ctx.lineTo(80, ribbonY + 80);
+    ctx.closePath();
     ctx.fill();
     
-    // 影をつける
-    ctx.strokeStyle = '#FF6B9D';
-    ctx.lineWidth = 4;
-    ctx.stroke();
+    // リボンの影
+    ctx.fillStyle = '#FF4081';
+    ctx.beginPath();
+    ctx.moveTo(100, ribbonY + 80);
+    ctx.lineTo(980, ribbonY + 80);
+    ctx.lineTo(990, ribbonY + 90);
+    ctx.lineTo(90, ribbonY + 90);
+    ctx.closePath();
+    ctx.fill();
 
-    // キャラクター名（丸ゴシック・優しいピンク）
+    // キャラクター名（白文字）
+    ctx.fillStyle = 'white';
+    ctx.font = 'bold 68px "M PLUS Rounded 1c", sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText(character.name, 540, ribbonY + 58);
+
+    // MBTIタイプ（ピンクの小さい吹き出し）
     ctx.fillStyle = '#FFB6C1';
-    ctx.font = 'bold 72px "Rounded Mplus 1c", "M PLUS Rounded 1c", "Hiragino Maru Gothic ProN", sans-serif';
+    ctx.beginPath();
+    ctx.roundRect(380, 1150, 320, 60, 30);
+    ctx.fill();
+    
+    ctx.fillStyle = 'white';
+    ctx.font = 'bold 32px "M PLUS Rounded 1c", sans-serif';
+    ctx.fillText(`${character.mbti} タイプ`, 540, 1190);
+
+    // キャッチフレーズ（白い背景付き）
+    const catchY = 1250;
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.95)';
+    ctx.beginPath();
+    ctx.roundRect(60, catchY, 960, 140, 25);
+    ctx.fill();
+    
+    // キャッチフレーズのテキスト
+    ctx.fillStyle = '#FF6B9D';
+    ctx.font = 'bold 36px "M PLUS Rounded 1c", sans-serif';
     ctx.textAlign = 'center';
-    ctx.fillText(character.name, 540, 1240);
+    wrapText(ctx, character.catchphrase, 540, catchY + 50, 880, 50);
 
-    // MBTIタイプ（小さめ・丸ゴシック）
-    ctx.fillStyle = '#999';
-    ctx.font = 'bold 28px "Rounded Mplus 1c", "M PLUS Rounded 1c", "Hiragino Maru Gothic ProN", sans-serif';
-    ctx.fillText(`[ ${character.mbti} タイプ ]`, 540, 1300);
+    // 装飾（ハートとキラキラ）
+    ctx.font = '50px sans-serif';
+    ctx.fillStyle = '#FF6B9D';
+    ctx.fillText('💕', 120, 1430);
+    ctx.fillText('💕', 960, 1430);
+    ctx.fillText('✨', 180, 1500);
+    ctx.fillText('✨', 900, 1500);
+    ctx.fillText('🌸', 150, 1570);
+    ctx.fillText('🌸', 930, 1570);
 
-    // キャッチフレーズ（POPな感じ）
-    ctx.fillStyle = '#2C5F8D';
-    ctx.font = 'bold 32px "Rounded Mplus 1c", "M PLUS Rounded 1c", "Arial Rounded MT Bold", sans-serif';
+    // 説明文（白い背景付き）
+    const descY = 1450;
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.95)';
+    ctx.beginPath();
+    ctx.roundRect(80, descY, 920, 360, 25);
+    ctx.fill();
+    
+    // 説明文のタイトル
+    ctx.fillStyle = '#FF6B9D';
+    ctx.font = 'bold 38px "M PLUS Rounded 1c", sans-serif';
     ctx.textAlign = 'center';
-    const maxWidth = 800;
-    wrapText(ctx, character.catchphrase, 540, 1370, maxWidth, 50);
+    ctx.fillText('✨ あなたの特徴 ✨', 540, descY + 50);
 
-    // 説明文（枠なし・シンプル）
-    const descY = 1500;
-
-    // 説明文の本文のみ（タイトルなし）
-    ctx.fillStyle = '#333';
-    ctx.font = '26px "Rounded Mplus 1c", "M PLUS Rounded 1c", "Hiragino Maru Gothic ProN", sans-serif';
+    // 説明文の本文
+    ctx.fillStyle = '#555';
+    ctx.font = '28px "M PLUS Rounded 1c", sans-serif';
     ctx.textAlign = 'center';
-    wrapText(ctx, character.description, 540, descY, 840, 40);
+    wrapText(ctx, character.description, 540, descY + 120, 840, 42);
 
-    // ボタンを元に戻す
+    // 下部の招待メッセージ
+    ctx.fillStyle = '#FF6B9D';
+    ctx.font = 'bold 32px "M PLUS Rounded 1c", sans-serif';
+    ctx.fillText('🎀 診断してみてね 🎀', 540, 1860);
+
+    // Data URLを生成して保存
+    generatedImageUrl = canvas.toDataURL('image/png', 1.0);
+    console.log('✅ 画像生成完了！');
+    
+  } catch (error) {
+    console.error('画像生成エラー:', error);
+  }
+}
+
+// 結果画像を表示（事前生成済みの画像を使用）
+async function downloadResultImage(event) {
+  const btn = event.target;
+  
+  // 既に生成済みの画像がある場合
+  if (generatedImageUrl) {
+    displayGeneratedImage(generatedImageUrl);
+    return;
+  }
+  
+  // まだ生成中の場合はローディング表示
+  const originalText = btn.textContent;
+  btn.textContent = '生成中...';
+  btn.disabled = true;
+  
+  try {
+    // 画像生成を待つ
+    await generateResultImage();
+    
     btn.textContent = originalText;
     btn.disabled = false;
-
-    // 画像を新しいタブで表示（モバイル対応）
-    const dataUrl = canvas.toDataURL('image/png', 1.0);
-    const newWindow = window.open();
     
-    if (newWindow) {
-      newWindow.document.write(`
-        <!DOCTYPE html>
-        <html>
-        <head>
-          <meta charset="UTF-8">
-          <meta name="viewport" content="width=device-width, initial-scale=1.0">
-          <title>診断結果画像</title>
-          <style>
-            body {
-              margin: 0;
-              padding: 20px;
-              background: #f0f0f0;
-              display: flex;
-              flex-direction: column;
-              align-items: center;
-              font-family: sans-serif;
-            }
-            img {
-              max-width: 100%;
-              height: auto;
-              box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-              border-radius: 10px;
-            }
-            p {
-              margin: 20px 0;
-              text-align: center;
-              color: #333;
-              font-size: 16px;
-              line-height: 1.6;
-            }
-            .note {
-              background: white;
-              padding: 15px;
-              border-radius: 8px;
-              margin-top: 10px;
-            }
-          </style>
-        </head>
-        <body>
-          <img src="${dataUrl}" alt="診断結果" />
-          <div class="note">
-            <p><strong>📸 画像を保存する方法</strong></p>
-            <p>画像を<strong>長押し</strong>して「画像を保存」を選択してください</p>
-          </div>
-        </body>
-        </html>
-      `);
-    } else {
-      // ポップアップがブロックされた場合
-      alert('画像を表示できませんでした。\nポップアップブロックを解除してください。');
+    if (generatedImageUrl) {
+      displayGeneratedImage(generatedImageUrl);
     }
-    
   } catch (error) {
     console.error('画像生成エラー:', error);
     alert('画像の生成に失敗しました。\nもう一度お試しください。');
@@ -371,7 +416,69 @@ async function downloadResultImage(event) {
   }
 }
 
-// テキストを折り返して描画
+// 生成済み画像を新しいタブで表示
+function displayGeneratedImage(dataUrl) {
+  const newWindow = window.open();
+  
+  if (newWindow) {
+    newWindow.document.write(`
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>診断結果画像</title>
+        <style>
+          body {
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(180deg, #A7D1E9 0%, #FCD5DE 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-family: 'M PLUS Rounded 1c', sans-serif;
+          }
+          img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+            border-radius: 15px;
+          }
+          .note {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin-top: 20px;
+            max-width: 500px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+          }
+          p {
+            margin: 10px 0;
+            text-align: center;
+            color: #333;
+            font-size: 16px;
+            line-height: 1.8;
+          }
+          strong {
+            color: #FF6B9D;
+          }
+        </style>
+      </head>
+      <body>
+        <img src="${dataUrl}" alt="診断結果" />
+        <div class="note">
+          <p><strong>📸 画像を保存する方法</strong></p>
+          <p>画像を<strong>長押し</strong>して<br>「画像を保存」を選択してください</p>
+          <p>💕 SNSでシェアしてね 💕</p>
+        </div>
+      </body>
+      </html>
+    `);
+  } else {
+    alert('画像を表示できませんでした。\nポップアップブロックを解除してください。');
+  }
+}
+
 function wrapText(ctx, text, x, y, maxWidth, lineHeight) {
   const words = text.split('');
   let line = '';
