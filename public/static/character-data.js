@@ -136,7 +136,7 @@ const characterData = {
     mbti: 'ISFJ型',
     image: '/static/images/ISFJ.jpg',
     color: '#FFDAB9',
-    lineUrl: 'https://lin.ee/sDnyAyE',
+    lineUrl: 'https://utage-system.com/line/open/eM257omZzkp3?mtid=rMCT4SKx8xKO',
     catchphrase: '丁寧で確実な仕事ぶり',
     description: '慎重で丁寧なタイプ。ミスなく確実に仕事をこなします。ルーティン業務を着実にこなし、品質管理に優れています。',
     radar: [4, 4, 3, 2, 3],
