@@ -345,37 +345,44 @@ async function generateResultImage() {
     ctx.roundRect(80, nameY, 920, 100, 20);
     ctx.stroke();
 
-    // キャラクター名（中央配置）
+    // キャラクター名（中央配置、1行で収まるサイズ）
     ctx.fillStyle = '#FF6B9D';
-    ctx.font = 'bold 64px "M PLUS Rounded 1c", sans-serif';
+    ctx.font = 'bold 56px "M PLUS Rounded 1c", sans-serif';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
     ctx.fillText(character.name, 540, nameY + 50);
     ctx.textBaseline = 'alphabetic';
 
-    // キャッチフレーズエリア
+    // キャッチフレーズエリア（2行表示）
     const catchY = 1060;
     ctx.fillStyle = 'rgba(79, 195, 247, 0.15)';
     ctx.beginPath();
-    ctx.roundRect(60, catchY, 960, 100, 20);
+    ctx.roundRect(60, catchY, 960, 120, 20);
     ctx.fill();
     
-    // キャッチフレーズを中央に配置
+    // キャッチフレーズを2行で中央に配置
     ctx.fillStyle = '#00ACC1';
     ctx.font = 'bold 36px "M PLUS Rounded 1c", sans-serif';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
-    wrapText(ctx, character.catchphrase, 540, catchY + 55, 900, 45);
+    
+    // キャッチフレーズを改行で分割
+    const catchphraseLines = character.catchphrase.split('\n');
+    const startY = catchY + (catchphraseLines.length === 1 ? 60 : 45);
+    catchphraseLines.forEach((line, index) => {
+      ctx.fillText(line.trim(), 540, startY + (index * 45));
+    });
+    
     ctx.textBaseline = 'alphabetic';
 
     // 歯科器具アイコン（装飾）
     ctx.font = '40px sans-serif';
     ctx.fillStyle = '#4FC3F7';
-    ctx.fillText('🪥', 100, catchY + 55);
-    ctx.fillText('🦷', 980, catchY + 55);
+    ctx.fillText('🪥', 100, catchY + 60);
+    ctx.fillText('🦷', 980, catchY + 60);
 
     // 説明文エリア（白い清潔なボックス）
-    const descY = 1220;
+    const descY = 1240;
     ctx.fillStyle = 'rgba(255, 255, 255, 0.98)';
     ctx.shadowColor = 'rgba(0, 0, 0, 0.1)';
     ctx.shadowBlur = 20;

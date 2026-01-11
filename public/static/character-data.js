@@ -124,7 +124,7 @@ const characterData = {
     image: '/static/images/ENTP.jpg',
     color: '#87CEEB',
     lineUrl: 'https://utage-system.com/line/open/ssF2HXqh7k7S?mtid=TsMYUI54jWLb',
-    catchphrase: '発想豊かなアイデアマン',
+    catchphrase: '発想豊かな\nアイデアマン',
     description: '創造的で柔軟な発想ができるタイプ。新しい方法を提案するのが得意で、改善やイノベーションを起こします。変化を楽しみ、挑戦を歓迎します。',
     radar: [3, 4, 4, 5, 5],
     workStyle: ['企画立案', '改善提案', '新規プロジェクト'],
