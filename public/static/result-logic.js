@@ -33,6 +33,9 @@ function displayResult() {
   
   // LINEボタン上部のキャラ名リマインダーにも表示
   document.getElementById('characterNameReminder').textContent = character.name;
+  
+  // LINE URLを設定（キャラごとに異なる）
+  document.getElementById('lineCtaBtn').href = character.lineUrl;
 
   // 向いている働き方
   const workStyleList = document.getElementById('workStyleList');
