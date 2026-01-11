@@ -31,9 +31,6 @@ function displayResult() {
   document.getElementById('catchphrase').textContent = character.catchphrase;
   document.getElementById('description').textContent = character.description;
   
-  // LINEボタン上部のキャラ名リマインダーにも表示
-  document.getElementById('characterNameReminder').textContent = character.name;
-  
   // LINE URLを設定（キャラごとに異なる）
   document.getElementById('lineCtaBtn').href = character.lineUrl;
 
