@@ -6,7 +6,7 @@ const characterData = {
     mbti: 'ENFP型',
     image: '/static/images/ENFP.jpg',
     color: '#FFB6C1',
-    lineUrl: 'https://lin.ee/PJoKVxPo',
+    lineUrl: 'https://utage-system.com/line/open/ssF2HXqh7k7S?mtid=frfI8tAfAeEr',
     catchphrase: '明るく元気なムードメーカー！',
     description: '社交的で好奇心旺盛。患者さんとのコミュニケーションが得意で、チームを明るくする存在。新しいことにチャレンジするのが好きで、職場に笑顔と活気をもたらします。患者さんの不安を和らげる温かい雰囲気が魅力です。',
     radar: [4, 3, 5, 5, 5], // 共感力, 技術力, コミュ力, 積極性, 柔軟性
